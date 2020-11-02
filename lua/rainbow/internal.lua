@@ -5,7 +5,7 @@ local configs = require "nvim-treesitter.configs"
 function M.attach(bufnr, lang)
   local parser = parsers.get_parser(bufnr, lang)
   local config = configs.get_module('rainbow')
-  local query = queries.get_query(lang, "highlights")
+  local query = queries.get_query(lang, "parens")
   if not query then return end
 
   M.highlighters[bufnr] = ts.highlighter.new(parser, query)
