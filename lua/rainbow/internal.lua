@@ -1,7 +1,10 @@
-local M = {}
+local api = vim.api
+local ts = vim.treesitter
 local queries = require "nvim-treesitter.query"
 local configs = require "nvim-treesitter.configs"
+local parsers = require'nvim-treesitter.parsers'
 
+local M = {}
 function M.attach(bufnr, lang)
   local parser = parsers.get_parser(bufnr, lang)
   local config = configs.get_module('rainbow')
