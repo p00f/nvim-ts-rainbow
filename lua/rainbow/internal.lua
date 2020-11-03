@@ -20,11 +20,7 @@ function M.attach(bufnr, lang)
 end
 
 function M.detach(bufnr)
-  if M.highlighters[bufnr] then
-    M.highlighters[bufnr]:set_query("")
-    M.highlighters[bufnr] = nil
-  end
-  api.nvim_buf_set_option(bufnr, 'syntax', 'on')
+  
 end
 
 return M
