@@ -11,10 +11,8 @@ function M.attach(bufnr, lang)
   local tree = parser:parse():root()
   if not query then return end
   for id, node in query:iter_captures(tree:root(),0,1,20) do
-    -- typically useful info about the node:
-    local type = node:type() -- type of the captured node
     local row1, col1, row2, col2 = node:range() -- range of the capture
-    vim.api.nvim_buf_set_extmark(0, nsid, row1, col1, {0, row2, col2, 'rainbowcol'})
+    vim.api.nvim_buf_set_extmark(bufnr, nsid, row1, col1, {0, row2, col2, 'rainbowcol'})
   end
 
 end
