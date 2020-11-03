@@ -1,1 +1,1 @@
-lua require "module-template".init()
+lua require "rainbow".init()
