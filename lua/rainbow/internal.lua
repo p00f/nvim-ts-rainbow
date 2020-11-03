@@ -8,7 +8,7 @@ local M = {}
 function M.attach(bufnr, lang)
   local parser = parsers.get_parser(bufnr, lang)
   local query = queries.get_query(lang, "parens")
-  local tree = parser:parse()
+  local tree = parser:parse():root()
   if not query then return end
   for id, node in query:iter_captures(tree:root(),0,1,20) do
     -- typically useful info about the node:
