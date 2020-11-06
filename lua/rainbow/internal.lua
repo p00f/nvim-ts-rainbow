@@ -5,7 +5,7 @@ local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 local colors = {
   "#7F00FF",
   "#3F00FF",
-  "#0000FF",
+  "#0FFFFF",
   "#00FF00",
   "#FFFF00",
   "#FF7F00",
@@ -28,7 +28,7 @@ function M.attach(bufnr, lang)
   end
 
   local index = 1
-  for _, node in query:iter_captures(tree:root(), bufnr, 1, 20) do
+  for _, node in query:iter_captures(tree:root(), bufnr, 0, 0) do
 
     -- set colour for this nesting level
     local color = 0
@@ -39,19 +39,19 @@ function M.attach(bufnr, lang)
     end
 
     local startRow, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
-    vim.api.nvim_buf_set_extmark( --highlight opening paren (works)
+    vim.api.nvim_buf_set_extmark( --highlight opening paren
       bufnr,
       nsid,
       startRow,
       startCol,
       {end_line = startRow, end_col = startCol + 1, hl_group = "rainbowcol" .. color}
     )
-    vim.api.nvim_buf_set_extmark( --highlight closing paren (doesn't work)
+    vim.api.nvim_buf_set_extmark( --highlight closing paren
       bufnr,
       nsid,
       endRow,
-      endCol,
-      {end_line = endRow + 1, end_col = 0, hl_group = "rainbowcol" .. color}
+      endCol - 1,
+      {end_line = endRow, end_col = endCol, hl_group = "rainbowcol" .. color}
     )
     index = index + 1
   end
