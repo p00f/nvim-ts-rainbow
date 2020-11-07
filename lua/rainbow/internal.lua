@@ -15,19 +15,37 @@ local callbackfn = function(parser, query, bufnr)
     end
 
     local startRow, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
-    vim.api.nvim_buf_set_extmark( --highlight opening paren
+    --vim.api.nvim_buf_set_extmark( --highlight opening paren
+    --  bufnr,
+    --  nsid,
+    --  startRow,
+    --  startCol,
+    --  {end_line = startRow, end_col = startCol + 1, hl_group = "rainbowcol" .. color}
+    --)
+    --vim.api.nvim_buf_set_extmark( --highlight closing paren
+    --  bufnr,
+    --  nsid,
+    --  endRow,
+    --  endCol - 1,
+    --  {end_line = endRow, end_col = endCol, hl_group = "rainbowcol" .. color}
+    --)
+    vim.highlight.range(
       bufnr,
       nsid,
-      startRow,
-      startCol,
-      {end_line = startRow, end_col = startCol + 1, hl_group = "rainbowcol" .. color}
+      ("rainbowcol" .. color),
+      {startRow, startCol},
+      {startRow, startCol},
+      "blockwise",
+      true
     )
-    vim.api.nvim_buf_set_extmark( --highlight closing paren
+    vim.highlight.range(
       bufnr,
       nsid,
-      endRow,
-      endCol - 1,
-      {end_line = endRow, end_col = endCol, hl_group = "rainbowcol" .. color}
+      ("rainbowcol" .. color),
+      {endRow, endCol - 1},
+      {endRow, endCol - 1},
+      "blockwise",
+      true
     )
     index = index + 1
   end
