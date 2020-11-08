@@ -2,6 +2,16 @@ local queries = require "nvim-treesitter.query"
 local parsers = require "nvim-treesitter.parsers"
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 
+local colors = {
+  "#cc241d",
+  "#d65d0e",
+  "#458588",
+  "#689d6a",
+  "#d79921",
+  "#b16286",
+  "#a89984"
+}
+
 local callbackfn = function(parser, query, bufnr)
   local index = 1
   local tree = parser:parse()
@@ -15,20 +25,6 @@ local callbackfn = function(parser, query, bufnr)
     end
 
     local startRow, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
-    --vim.api.nvim_buf_set_extmark( --highlight opening paren
-    --  bufnr,
-    --  nsid,
-    --  startRow,
-    --  startCol,
-    --  {end_line = startRow, end_col = startCol + 1, hl_group = "rainbowcol" .. color}
-    --)
-    --vim.api.nvim_buf_set_extmark( --highlight closing paren
-    --  bufnr,
-    --  nsid,
-    --  endRow,
-    --  endCol - 1,
-    --  {end_line = endRow, end_col = endCol, hl_group = "rainbowcol" .. color}
-    --)
     vim.highlight.range(
       bufnr,
       nsid,
@@ -51,16 +47,6 @@ local callbackfn = function(parser, query, bufnr)
   end
 end
 
-local colors = {
-  "#7F00FF",
-  "#3F00FF",
-  "#0FFFFF",
-  "#00FF00",
-  "#FFFF00",
-  "#FF7F00",
-  "#FF0000"
-}
-
 local M = {}
 
 function M.attach(bufnr, lang)
@@ -74,6 +60,7 @@ function M.attach(bufnr, lang)
     local s = "highlight rainbowcol" .. i .. " guifg=" .. colors[i]
     vim.cmd(s)
   end
+  vim.cmd [[highlight te guifg=#000000]]
   callbackfn(parser, query, bufnr) -- do it on intial load
   vim.api.nvim_buf_attach( --do it one every change
     bufnr,
