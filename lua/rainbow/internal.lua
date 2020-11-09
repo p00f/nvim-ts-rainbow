@@ -2,15 +2,7 @@ local queries = require "nvim-treesitter.query"
 local parsers = require "nvim-treesitter.parsers"
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 
-local colors = {
-  "#cc241d",
-  "#d65d0e",
-  "#458588",
-  "#689d6a",
-  "#d79921",
-  "#b16286",
-  "#a89984"
-}
+local colors = require "rainbow.colors"
 
 local callbackfn = function(parser, query, bufnr)
   local index = 1
