@@ -52,7 +52,6 @@ function M.attach(bufnr, lang)
     local s = "highlight rainbowcol" .. i .. " guifg=" .. colors[i]
     vim.cmd(s)
   end
-  vim.cmd [[highlight te guifg=#000000]]
   callbackfn(parser, query, bufnr) -- do it on intial load
   vim.api.nvim_buf_attach( --do it one every change
     bufnr,
