@@ -11,3 +11,7 @@ After using this template, you will need to :
  - [ ] Code your module !
 
 # WIP
+
+ - [ ] nest
+ - [ ] java array access
+ - [ ] clojure set
