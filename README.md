@@ -1,17 +1,15 @@
-# module-template
-A repository template to create you own nvim-treesitter module !
+# nvim-ts-rainbow
+Rainbow parens for neovim using tree-sitter. Needs [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 
-Please find below the list of things you will need to do to get going !
+## Setup
+```lua
+require'nvim-treesitter.config'.setup {
+  rainbow = {
+    enable = true
+    disable = {'lua'}
+  }
+}
+```
 
-# TODO (for you)
-After using this template, you will need to :
- - [x] Rename every from `example-module` to the actual name of your module
- - [x] Maybe rename the queries.
- - [x] Send us a message here : [![Gitter](https://badges.gitter.im/nvim-treesitter/community.svg)](https://gitter.im/nvim-treesitter/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
- - [ ] Code your module !
-
-# WIP
-
- - [ ] nest
- - [ ] java array access
- - [ ] clojure set
+## Credits
+Huge thanks to @vigoux, @theHamsta, @sogaiu and @steelsojka for all their help

@@ -10,7 +10,7 @@ function M.init()
       module_path = "rainbow.internal",
       is_supported = function(lang)
         -- TODO: you don't want your queries to be named `awesome-query`, do you ?
-        return queries.get_query(lang, 'parens') ~= nil
+        return queries.get_query(lang, 'highlights') ~= nil
       end
     }
   }
