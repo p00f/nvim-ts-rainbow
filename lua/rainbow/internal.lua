@@ -1,22 +1,27 @@
 local queries = require "nvim-treesitter.query"
-local parsers = require "nvim-treesitter.parsers"
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
-
 local colors = require "rainbow.colors"
 
-local callbackfn = function(parser, query, bufnr, lang)
-  local index = 1
-  local tree = parser:parse()
-  for _, node in query:iter_captures(tree:root(), bufnr, 0, 0) do
+local function indexlevel(mynode)
+  local counter = 0
+  local current = mynode
+  while current:parent() ~= nil do
+    counter = counter + 1
+    current = current:parent()
+  end
+  if (counter % 7 == 0) then
+    return 7
+  else
+    return (counter % 7)
+  end
+end
+
+local callbackfn = function(bufnr)
+  local matches = queries.get_capture_matches(bufnr, "@punctuation.bracket", "highlights")
+  for _, node in ipairs(matches) do
     -- set colour for this nesting level
-    local color = 0
-    if index % 7 == 0 then
-      color = 7
-    else
-      color = (index % 7)
-    end
-    local special = require "rainbow.special_cases"
-    local startRow, startCol, endRow, endCol = special.range(node, lang) -- range of the capture, zero-indexed
+    local color = indexlevel(node.node)
+    local startRow, startCol, endRow, endCol = node.node:range() -- range of the capture, zero-indexed
     vim.highlight.range(
       bufnr,
       nsid,
@@ -35,15 +40,17 @@ local callbackfn = function(parser, query, bufnr, lang)
       "blockwise",
       true
     )
-    index = index + 1
   end
 end
 
 local M = {}
 
 function M.attach(bufnr, lang)
-  local parser = parsers.get_parser(bufnr, lang)
-  local query = queries.get_query(lang, "parens")
+  require "nvim-treesitter.highlight"
+  local hlmap = vim.treesitter.highlighter.hl_map
+  hlmap["punctuation.bracket"] = nil
+
+  local query = queries.get_query(lang, "highlights")
   if not query then
     return
   end
@@ -52,13 +59,13 @@ function M.attach(bufnr, lang)
     local s = "highlight rainbowcol" .. i .. " guifg=" .. colors[i]
     vim.cmd(s)
   end
-  callbackfn(parser, query, bufnr, lang) -- do it on intial load
-  vim.api.nvim_buf_attach( --do it one every change
+  callbackfn(bufnr) -- do it on intial load
+  vim.api.nvim_buf_attach( --do it on every change
     bufnr,
     false,
     {
       on_lines = function()
-        callbackfn(parser, query, bufnr, lang)
+        callbackfn(bufnr)
       end
     }
   )
