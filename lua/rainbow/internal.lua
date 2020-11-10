@@ -4,7 +4,7 @@ local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 
 local colors = require "rainbow.colors"
 
-local callbackfn = function(parser, query, bufnr)
+local callbackfn = function(parser, query, bufnr, lang)
   local index = 1
   local tree = parser:parse()
   for _, node in query:iter_captures(tree:root(), bufnr, 0, 0) do
@@ -15,8 +15,8 @@ local callbackfn = function(parser, query, bufnr)
     else
       color = (index % 7)
     end
-
-    local startRow, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
+    local special = require "rainbow.special_cases"
+    local startRow, startCol, endRow, endCol = special.range(node, lang) -- range of the capture, zero-indexed
     vim.highlight.range(
       bufnr,
       nsid,
@@ -52,13 +52,13 @@ function M.attach(bufnr, lang)
     local s = "highlight rainbowcol" .. i .. " guifg=" .. colors[i]
     vim.cmd(s)
   end
-  callbackfn(parser, query, bufnr) -- do it on intial load
+  callbackfn(parser, query, bufnr, lang) -- do it on intial load
   vim.api.nvim_buf_attach( --do it one every change
     bufnr,
     false,
     {
       on_lines = function()
-        callbackfn(parser, query, bufnr)
+        callbackfn(parser, query, bufnr, lang)
       end
     }
   )

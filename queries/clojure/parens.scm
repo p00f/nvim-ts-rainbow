@@ -1,1 +1,1 @@
-[(list_lit) (vec_lit) (map_lit)] @paren_expr
+[(list_lit) (vec_lit) (map_lit) (set_lit)] @paren_expr
