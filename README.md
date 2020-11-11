@@ -3,7 +3,7 @@ Rainbow parens for neovim using tree-sitter. Needs [nvim-treesitter](https://git
 
 ## Setup
 ```lua
-require'nvim-treesitter.config'.setup {
+require'nvim-treesitter.configs'.setup {
   rainbow = {
     enable = true,
     disable = {'lua'} -- please disable lua for now
