@@ -2,7 +2,7 @@ local queries = require "nvim-treesitter.query"
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 local colors = require "rainbow.colors"
 
-local function indexlevel(mynode)
+local function color_no(mynode)
   local counter = 0
   local current = mynode
   while current:parent() ~= nil do
@@ -20,23 +20,14 @@ local callbackfn = function(bufnr)
   local matches = queries.get_capture_matches(bufnr, "@punctuation.bracket", "highlights")
   for _, node in ipairs(matches) do
     -- set colour for this nesting level
-    local color = indexlevel(node.node)
-    local startRow, startCol, endRow, endCol = node.node:range() -- range of the capture, zero-indexed
+    local color_no_ = color_no(node.node)
+    local startRow, startCol, _, _ = node.node:range() -- range of the capture, zero-indexed
     vim.highlight.range(
       bufnr,
       nsid,
-      ("rainbowcol" .. color),
+      ("rainbowcol" .. color_no_),
       {startRow, startCol},
       {startRow, startCol},
-      "blockwise",
-      true
-    )
-    vim.highlight.range(
-      bufnr,
-      nsid,
-      ("rainbowcol" .. color),
-      {endRow, endCol - 1},
-      {endRow, endCol - 1},
       "blockwise",
       true
     )
@@ -59,6 +50,7 @@ function M.attach(bufnr, lang)
     local s = "highlight rainbowcol" .. i .. " guifg=" .. colors[i]
     vim.cmd(s)
   end
+
   callbackfn(bufnr) -- do it on intial load
   vim.api.nvim_buf_attach( --do it on every change
     bufnr,
