@@ -6,7 +6,7 @@ Rainbow parens for neovim using tree-sitter. Needs [nvim-treesitter](https://git
 require'nvim-treesitter.configs'.setup {
   rainbow = {
     enable = true,
-    disable = {'lua'} -- please disable lua for now
+    disable = {'lua', 'bash'} -- please disable lua and bash for now
   }
 }
 ```
