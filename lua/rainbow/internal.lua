@@ -20,17 +20,19 @@ local callbackfn = function(bufnr)
   local matches = queries.get_capture_matches(bufnr, "@punctuation.bracket", "highlights")
   for _, node in ipairs(matches) do
     -- set colour for this nesting level
-    local color_no_ = color_no(node.node)
-    local startRow, startCol, _, _ = node.node:range() -- range of the capture, zero-indexed
-    vim.highlight.range(
-      bufnr,
-      nsid,
-      ("rainbowcol" .. color_no_),
-      {startRow, startCol},
-      {startRow, startCol},
-      "blockwise",
-      true
-    )
+    if (node ~= nil and node.node ~=nil) then
+      local color_no_ = color_no(node.node)
+      local _, _, endRow, endCol = node.node:range() -- range of the capture, zero-indexed
+      vim.highlight.range(
+        bufnr,
+        nsid,
+        ("rainbowcol" .. color_no_),
+        {endRow, endCol - 1},
+        {endRow, endCol - 1},
+        "blockwise",
+        true
+      )
+    end
   end
 end
 
