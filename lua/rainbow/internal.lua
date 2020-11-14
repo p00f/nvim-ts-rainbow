@@ -20,7 +20,7 @@ local callbackfn = function(bufnr)
   local matches = queries.get_capture_matches(bufnr, "@punctuation.bracket", "highlights")
   for _, node in ipairs(matches) do
     -- set colour for this nesting level
-    if (node ~= nil and node.node ~=nil) then
+    if (node ~= nil and node.node ~= nil) then
       local color_no_ = color_no(node.node)
       local _, _, endRow, endCol = node.node:range() -- range of the capture, zero-indexed
       vim.highlight.range(
@@ -66,7 +66,15 @@ function M.attach(bufnr, lang)
 end
 
 function M.detach(bufnr)
-  vim.api.nvim_buf_detach(bufnr)
+  vim.api.nvim_buf_attach(
+    bufnr,
+    false,
+    {on_lines = function() return true end}
+  )
+  require "nvim-treesitter.highlight"
+  local hlmap = vim.treesitter.highlighter.hl_map
+  hlmap["punctuation.bracket"] = "TSPunctBracket"
+--  vim.cmd[[highlight link TSPunctBracket Delimiter]]
 end
 
 return M
