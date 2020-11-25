@@ -20,7 +20,7 @@ I've used the gruvbox palette because it is nice and subtle. I wanted to use VIB
  - indigo and blue look the same.
  - the colours were too bright and distracting.
 
-To change the colours, edit `lua/rainbow/colors.lua` and commit your changes.
+To change the colours, edit `lua/rainbow/colors.lua`. This is safe, the file is in gitignore.
 ## Screenshots
 ![alt text](https://raw.githubusercontent.com/p00f/nvim-ts-rainbow/master/screenshots/java.png)
 ![alt text](https://raw.githubusercontent.com/p00f/nvim-ts-rainbow/master/screenshots/clojure.png)
