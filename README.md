@@ -10,7 +10,7 @@ Tested languages - lua, java, clojure, fennel, python. Should work with any lang
 require'nvim-treesitter.configs'.setup {
   rainbow = {
     enable = true,
-    disable = {'bash'} -- please disable bash for now
+    disable = {'bash'} -- please disable bash for now - see #1
   }
 }
 ```
