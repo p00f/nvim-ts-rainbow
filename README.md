@@ -2,7 +2,8 @@
 Rainbow parens for neovim using tree-sitter. Needs [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter).
 
 Tested languages - lua, java, clojure, fennel, python. Should work with any language (except lua and bash and I don't know, something else too)
-(UPDATE - lua works after [neovim/neovim/#133357](https://github.com/neovim/neovim/pull/13357#issuecomment-733656851) was merged)
+
+(**Update** - lua works after [neovim/neovim/#133357](https://github.com/neovim/neovim/pull/13357#issuecomment-733656851) was merged)
 
 ## Setup
 ```lua
