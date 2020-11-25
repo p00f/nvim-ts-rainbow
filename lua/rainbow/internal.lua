@@ -80,7 +80,7 @@ function M.detach(bufnr)
   require "nvim-treesitter.highlight"
   local hlmap = vim.treesitter.highlighter.hl_map
   hlmap["punctuation.bracket"] = "TSPunctBracket"
-  vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, 0)
+  vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1)
 end
 
 return M
