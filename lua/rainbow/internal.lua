@@ -71,13 +71,16 @@ function M.detach(bufnr)
   vim.api.nvim_buf_attach(
     bufnr,
     false,
-    {on_lines = function()
+    {
+      on_lines = function()
         return true
-      end}
+      end
+    }
   )
   require "nvim-treesitter.highlight"
   local hlmap = vim.treesitter.highlighter.hl_map
   hlmap["punctuation.bracket"] = "TSPunctBracket"
+  vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, 0)
 end
 
 return M
