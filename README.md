@@ -1,7 +1,7 @@
 # nvim-ts-rainbow
 Rainbow parens for neovim using tree-sitter. Needs [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter).
 
-Tested languages - lua, java, clojure, fennel, python, bash, css. Should work with any language.
+Tested languages - lua, java, clojure, fennel, python, css. Should work with any language, except bash and idk probably something else too.
 
 (**Update** - lua works after [neovim/neovim/#133357](https://github.com/neovim/neovim/pull/13357) was merged)
 
@@ -10,7 +10,7 @@ Tested languages - lua, java, clojure, fennel, python, bash, css. Should work wi
 require'nvim-treesitter.configs'.setup {
   rainbow = {
     enable = true,
-    disable = {'java'}
+    disable = {'bash'} -- please disable bash until I figure #1 out
   }
 }
 ```
