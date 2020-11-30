@@ -56,6 +56,7 @@ function M.attach(bufnr, lang)
   end
 
   local function try() callbackfn(bufnr) end
+
   callbackfn(bufnr) -- do it on intial load
   vim.api.nvim_buf_attach( --do it on every change
     bufnr,
