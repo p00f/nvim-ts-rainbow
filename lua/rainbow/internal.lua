@@ -55,13 +55,14 @@ function M.attach(bufnr, lang)
     vim.cmd(s)
   end
 
+  local function try() callbackfn(bufnr) end
   callbackfn(bufnr) -- do it on intial load
   vim.api.nvim_buf_attach( --do it on every change
     bufnr,
     false,
     {
       on_lines = function()
-        callbackfn(bufnr)
+        pcall(try)
       end
     }
   )
