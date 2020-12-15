@@ -20,7 +20,7 @@ I've used the gruvbox palette because it is nice and subtle. I wanted to use VIB
  - indigo and blue look the same.
  - the colours were too bright and distracting.
 
-To change the colours, edit `lua/rainbow/colors.lua`. If you want to override only a *few* colours (you can only change colours 1 through 7 this way), you can do it in your init.vim:
+To change the colours, edit `lua/rainbow/colors.lua`. If you want to override only a *few* colours (you can only change colours 1 through 7 this way), you can do it in your init.vim: (thanks @delphinus !)
 ```vim
 hi rainbowcol1 guifg=#123456
 ```
