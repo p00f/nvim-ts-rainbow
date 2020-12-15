@@ -47,7 +47,7 @@ function M.attach(bufnr, lang)
   end
 
   for i = 1, #colors do -- define highlight groups
-    local s = "highlight rainbowcol" .. i .. " guifg=" .. colors[i]
+    local s = "highlight default rainbowcol" .. i .. " guifg=" .. colors[i]
     vim.cmd(s)
   end
 
