@@ -17,6 +17,10 @@ local function color_no(mynode, len)
 end
 
 local callbackfn = function(bufnr)
+  if vim.fn.pumvisible() == 1 then
+    return
+  end
+
   local matches = queries.get_capture_matches(bufnr, "@punctuation.bracket", "highlights")
   for _, node in ipairs(matches) do
     -- set colour for this nesting level
@@ -61,9 +65,7 @@ function M.attach(bufnr, lang)
     false,
     {
       on_lines = function()
-        if not vim.fn.pumvisible() then
           pcall(try)
-        end
       end
     }
   )
