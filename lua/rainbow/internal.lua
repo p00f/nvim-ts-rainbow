@@ -61,7 +61,9 @@ function M.attach(bufnr, lang)
     false,
     {
       on_lines = function()
-        pcall(try)
+        if not vim.fn.pumvisible() then
+          pcall(try)
+        end
       end
     }
   )
