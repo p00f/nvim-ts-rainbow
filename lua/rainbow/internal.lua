@@ -17,6 +17,9 @@ local function color_no(mynode, len)
 end
 
 local callbackfn = function(bufnr)
+  if vim.fn.pumvisible() == 1 then
+      return
+  end
   local matches = queries.get_capture_matches(bufnr, "@punctuation.bracket", "highlights")
   for _, node in ipairs(matches) do
     -- set colour for this nesting level
@@ -36,6 +39,20 @@ end
 
 local M = {}
 
+local uv = vim.loop
+
+local function try_async(f)
+  if not f then return end
+  return function(...)
+    local async_handle
+    async_handle = uv.new_async(vim.schedule_wrap(function(...)
+      f(...)
+      async_handle:close()
+    end))
+    async_handle:send(...)
+  end
+end
+
 function M.attach(bufnr, lang)
   require "nvim-treesitter.highlight"
   local hlmap = vim.treesitter.highlighter.hl_map
@@ -51,18 +68,12 @@ function M.attach(bufnr, lang)
     vim.cmd(s)
   end
 
-  local function try()
-    callbackfn(bufnr)
-  end
-
   callbackfn(bufnr) -- do it on intial load
   vim.api.nvim_buf_attach( --do it on every change
     bufnr,
     false,
     {
-      on_lines = function()
-        pcall(try)
-      end
+      on_lines = try_async(callbackfn(bufnr))
     }
   )
 end
