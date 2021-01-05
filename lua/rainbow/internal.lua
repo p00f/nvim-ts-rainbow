@@ -23,11 +23,13 @@ local function color_no(mynode, len)
   end
 end
 
+-- local callbackfn = function(_, _, _, first_line, last_line)
 local callbackfn = function(bufnr)
   if vim.fn.pumvisible() == 1 then
     return
   end
 
+  -- local bufnr = vim.api.nvim_get_current_buf()
   local matches = queries.get_capture_matches(bufnr, "@punctuation.bracket", "highlights")
   for _, node in ipairs(matches) do
     -- set colour for this nesting level
@@ -47,15 +49,14 @@ end
 
 local M = {}
 
-local function try_async(f)
-  if not f then return end
-  return function(...)
+local function try_async(f, bufnr)
+  return function()
     local async_handle
-    async_handle = uv.new_async(vim.schedule_wrap(function(...)
-      f(...)
+    async_handle = uv.new_async(vim.schedule_wrap(function()
+      f(bufnr)
       async_handle:close()
     end))
-    async_handle:send(...)
+    async_handle:send()
   end
 end
 
@@ -68,11 +69,11 @@ function M.attach(bufnr, lang)
     return
   end
 
-  callbackfn(bufnr) -- do it on intial load
+  callbackfn(bufnr) -- do it on attach
   vim.api.nvim_buf_attach( --do it on every change
     bufnr,
     false,
-    { on_lines = try_async(callbackfn(bufnr))}
+    { on_lines = try_async(callbackfn)}
   )
 end
 
