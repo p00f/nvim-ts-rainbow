@@ -1,6 +1,7 @@
 local queries = require "nvim-treesitter.query"
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 local colors = require "rainbow.colors"
+local uv = vim.loop
 
 local function color_no(mynode, len)
   local counter = 0
@@ -18,8 +19,9 @@ end
 
 local callbackfn = function(bufnr)
   if vim.fn.pumvisible() == 1 then
-      return
+    return
   end
+
   local matches = queries.get_capture_matches(bufnr, "@punctuation.bracket", "highlights")
   for _, node in ipairs(matches) do
     -- set colour for this nesting level
@@ -38,8 +40,6 @@ local callbackfn = function(bufnr)
 end
 
 local M = {}
-
-local uv = vim.loop
 
 local function try_async(f)
   if not f then return end
@@ -72,9 +72,7 @@ function M.attach(bufnr, lang)
   vim.api.nvim_buf_attach( --do it on every change
     bufnr,
     false,
-    {
-      on_lines = try_async(callbackfn(bufnr))
-    }
+    { on_lines = try_async(callbackfn(bufnr))}
   )
 end
 
