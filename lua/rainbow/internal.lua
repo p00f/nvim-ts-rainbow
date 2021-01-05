@@ -3,6 +3,12 @@ local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 local colors = require "rainbow.colors"
 local uv = vim.loop
 
+-- setup highlights
+for i = 1, #colors do -- define highlight groups
+  local s = "highlight default rainbowcol" .. i .. " guifg=" .. colors[i]
+  vim.cmd(s)
+end
+
 local function color_no(mynode, len)
   local counter = 0
   local current = mynode
@@ -60,11 +66,6 @@ function M.attach(bufnr, lang)
   local query = queries.get_query(lang, "highlights")
   if not query then
     return
-  end
-
-  for i = 1, #colors do -- define highlight groups
-    local s = "highlight default rainbowcol" .. i .. " guifg=" .. colors[i]
-    vim.cmd(s)
   end
 
   callbackfn(bufnr) -- do it on intial load
