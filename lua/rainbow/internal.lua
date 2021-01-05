@@ -54,7 +54,6 @@ local function try_async(f)
 end
 
 function M.attach(bufnr, lang)
-  require "nvim-treesitter.highlight"
   local hlmap = vim.treesitter.highlighter.hl_map
   hlmap["punctuation.bracket"] = nil
 
@@ -86,7 +85,6 @@ function M.detach(bufnr)
       end
     }
   )
-  require "nvim-treesitter.highlight"
   local hlmap = vim.treesitter.highlighter.hl_map
   hlmap["punctuation.bracket"] = "TSPunctBracket"
   vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1)
