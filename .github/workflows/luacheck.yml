@@ -1,0 +1,3 @@
+- name: luacheck
+  uses: nebularg/actions-luacheck@v1.1.0
+  
