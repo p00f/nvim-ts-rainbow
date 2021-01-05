@@ -3,8 +3,8 @@ local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 local colors = require "rainbow.colors"
 local uv = vim.loop
 
--- setup highlights
-for i = 1, #colors do -- define highlight groups
+-- define highlight groups
+for i = 1, #colors do
   local s = "highlight default rainbowcol" .. i .. " guifg=" .. colors[i]
   vim.cmd(s)
 end
