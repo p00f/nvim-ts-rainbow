@@ -1,3 +1,11 @@
-- name: luacheck
-  uses: nebularg/actions-luacheck@v1.1.0
-  
+name: luacheck
+on:
+  # Lines below let you run workflow manually and on each commit
+  push: {branches: ["master", "main"]}
+  workflow_dispatch:
+jobs:
+  github-metrics:
+    runs-on: ubuntu-latest
+    steps:
+      # See action.yml for all options
+      - uses: nebularg/actions-luacheck@v1.1.0
