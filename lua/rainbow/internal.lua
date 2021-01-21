@@ -73,7 +73,7 @@ function M.attach(bufnr, lang)
   vim.api.nvim_buf_attach( --do it on every change
     bufnr,
     false,
-    { on_lines = try_async(callbackfn)}
+    { on_lines = try_async(callbackfn, bufnr)}
   )
 end
 
