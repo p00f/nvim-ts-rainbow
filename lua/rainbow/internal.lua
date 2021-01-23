@@ -27,7 +27,6 @@ end
 
 
 local callbackfn = function(bufnr)
-
   -- no need to do anything when pum is open
   if vim.fn.pumvisible() == 1 then
     return
@@ -55,31 +54,32 @@ end
 
 
 
-local M = {}
-
 local function try_async(f, bufnr)
+  local cancel = false
   return function()
+    if cancel then
+      return true
+    end
     local async_handle
-    async_handle = uv.new_async(vim.schedule_wrap(function()
-      f(bufnr)
-      async_handle:close()
-    end))
+    async_handle =
+      uv.new_async(
+      vim.schedule_wrap(
+        function()
+          f(bufnr)
+          async_handle:close()
+        end
+      )
+    )
     async_handle:send()
+  end, function()
+    cancel = true
   end
 end
 
-local function try_async1(f, bufnr)
-  local cancel = false
-  return function()
-    if cancel then return true end
-    local async_handle
-    async_handle = uv.new_async(vim.schedule_wrap(function()
-      f(bufnr)
-      async_handle:close()
-    end))
-    async_handle:send()
-  end, function() cancel = true end
-end
+
+
+
+local M = {}
 
 function M.attach(bufnr, lang)
   local hlmap = vim.treesitter.highlighter.hl_map
@@ -89,17 +89,13 @@ function M.attach(bufnr, lang)
   if not query then
     return
   end
-  local attach, _ = try_async1(callbackfn, bufnr)
+  local attach, _ = try_async(callbackfn, bufnr)
   callbackfn(bufnr) -- do it on attach
-  vim.api.nvim_buf_attach( --do it on every change
-    bufnr,
-    false,
-    { on_lines = attach()}
-  )
+  vim.api.nvim_buf_attach(bufnr, false, {on_lines = attach()}) --do it on every change
 end
 
 function M.detach(bufnr)
-  local _, detach = try_async1(callbackfn, bufnr)
+  local _, detach = try_async(callbackfn, bufnr)
   detach()
   local hlmap = vim.treesitter.highlighter.hl_map
   hlmap["punctuation.bracket"] = "TSPunctBracket"
