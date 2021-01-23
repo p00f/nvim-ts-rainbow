@@ -9,6 +9,7 @@ for i = 1, #colors do
   vim.cmd(s)
 end
 
+-- finds the nesting level of given node
 local function color_no(mynode, len)
   local counter = 0
   local current = mynode
@@ -23,13 +24,18 @@ local function color_no(mynode, len)
   end
 end
 
--- local callbackfn = function(_, _, _, first_line, last_line)
+
+
 local callbackfn = function(bufnr)
+
+  -- no need to do anything when pum is open
   if vim.fn.pumvisible() == 1 then
     return
   end
 
-  -- local bufnr = vim.api.nvim_get_current_buf()
+  --clear highlights or code commented out later has highlights too
+  vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1)
+
   local matches = queries.get_capture_matches(bufnr, "@punctuation.bracket", "highlights")
   for _, node in ipairs(matches) do
     -- set colour for this nesting level
@@ -47,6 +53,8 @@ local callbackfn = function(bufnr)
   end
 end
 
+
+
 local M = {}
 
 local function try_async(f, bufnr)
@@ -60,6 +68,19 @@ local function try_async(f, bufnr)
   end
 end
 
+local function try_async1(f, bufnr)
+  local cancel = false
+  return function()
+    if cancel then return true end
+    local async_handle
+    async_handle = uv.new_async(vim.schedule_wrap(function()
+      f(bufnr)
+      async_handle:close()
+    end))
+    async_handle:send()
+  end, function() cancel = true end
+end
+
 function M.attach(bufnr, lang)
   local hlmap = vim.treesitter.highlighter.hl_map
   hlmap["punctuation.bracket"] = nil
@@ -68,25 +89,18 @@ function M.attach(bufnr, lang)
   if not query then
     return
   end
-
+  local attach, _ = try_async1(callbackfn, bufnr)
   callbackfn(bufnr) -- do it on attach
   vim.api.nvim_buf_attach( --do it on every change
     bufnr,
     false,
-    { on_lines = try_async(callbackfn, bufnr)}
+    { on_lines = attach()}
   )
 end
 
 function M.detach(bufnr)
-  vim.api.nvim_buf_attach(
-    bufnr,
-    false,
-    {
-      on_lines = function()
-        return true
-      end
-    }
-  )
+  local _, detach = try_async1(callbackfn, bufnr)
+  detach()
   local hlmap = vim.treesitter.highlighter.hl_map
   hlmap["punctuation.bracket"] = "TSPunctBracket"
   vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1)
