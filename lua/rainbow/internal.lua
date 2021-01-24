@@ -22,6 +22,7 @@ local function color_no(mynode, len)
   else
     return (counter % len)
   end
+  print()
 end
 
 
@@ -77,7 +78,7 @@ local function try_async(f, bufnr)
 end
 
 
-Rainbow_state_table = {}
+Rainbow_state_table = {}  -- tracks which buffers have rainbow disabled
 
 local M = {}
 
@@ -90,14 +91,14 @@ function M.attach(bufnr, lang)
     return
   end
   local attachf, detachf = try_async(callbackfn, bufnr)
-  table.insert(Rainbow_state_table,bufnr,detachf)
+  Rainbow_state_table[bufnr] = detachf
   callbackfn(bufnr) -- do it on attach
-  vim.api.nvim_buf_attach(bufnr, false, {on_lines = attachf()}) --do it on every change
+  vim.api.nvim_buf_attach(bufnr, false, {on_lines = attachf}) --do it on every change
 end
 
 function M.detach(bufnr)
-  local detachff = Rainbow_state_table[bufnr]
-  detachff()
+  local detachf = Rainbow_state_table[bufnr]
+  detachf()
   local hlmap = vim.treesitter.highlighter.hl_map
   hlmap["punctuation.bracket"] = "TSPunctBracket"
   vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1)
