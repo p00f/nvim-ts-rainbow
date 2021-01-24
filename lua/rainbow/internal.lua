@@ -77,7 +77,7 @@ local function try_async(f, bufnr)
 end
 
 
-
+Rainbow_state_table = {}
 
 local M = {}
 
@@ -89,14 +89,15 @@ function M.attach(bufnr, lang)
   if not query then
     return
   end
-  local attach, _ = try_async(callbackfn, bufnr)
+  local attachf, detachf = try_async(callbackfn, bufnr)
+  table.insert(Rainbow_state_table,bufnr,detachf)
   callbackfn(bufnr) -- do it on attach
-  vim.api.nvim_buf_attach(bufnr, false, {on_lines = attach()}) --do it on every change
+  vim.api.nvim_buf_attach(bufnr, false, {on_lines = attachf()}) --do it on every change
 end
 
 function M.detach(bufnr)
-  local _, detach = try_async(callbackfn, bufnr)
-  detach()
+  local detachff = Rainbow_state_table[bufnr]
+  detachff()
   local hlmap = vim.treesitter.highlighter.hl_map
   hlmap["punctuation.bracket"] = "TSPunctBracket"
   vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1)
