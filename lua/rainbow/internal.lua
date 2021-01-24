@@ -57,10 +57,9 @@ end
 
 local function try_async(f, bufnr)
   local cancel = false
-  return function()
-    if cancel then
-      return true
-    end
+  return
+  function()
+    if cancel then return true end
     local async_handle
     async_handle =
       uv.new_async(
@@ -72,9 +71,8 @@ local function try_async(f, bufnr)
       )
     )
     async_handle:send()
-  end, function()
-    cancel = true
-  end
+  end,
+  function() cancel = true end
 end
 
 
