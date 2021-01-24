@@ -61,15 +61,14 @@ local function try_async(f, bufnr)
   function()
     if cancel then return true end
     local async_handle
-    async_handle =
-      uv.new_async(
-      vim.schedule_wrap(
-        function()
-          f(bufnr)
-          async_handle:close()
-        end
-      )
-    )
+    async_handle = uv.new_async(
+                    vim.schedule_wrap(
+                      function()
+                        f(bufnr)
+                        async_handle:close()
+                      end
+                    )
+                  )
     async_handle:send()
   end,
   function() cancel = true end
