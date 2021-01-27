@@ -22,7 +22,6 @@ local function color_no(mynode, len)
   else
     return (counter % len)
   end
-  print()
 end
 
 
