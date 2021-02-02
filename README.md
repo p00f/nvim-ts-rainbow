@@ -1,5 +1,5 @@
 # nvim-ts-rainbow
-Rainbow parens for neovim using tree-sitter. Needs [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter).
+Rainbow parentheses for neovim using tree-sitter. Needs [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter).
 
 Tested languages - lua, java, clojure, fennel, python, css. Should work with any language.
 
