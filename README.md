@@ -9,7 +9,7 @@ Tested languages - lua, java, clojure, fennel, python, css. Should work with any
 ```lua
 require'nvim-treesitter.configs'.setup {
   rainbow = {
-    enable = true,
+    enable = true
   }
 }
 ```
