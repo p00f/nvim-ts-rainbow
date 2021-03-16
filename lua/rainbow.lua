@@ -8,7 +8,7 @@ function M.init()
         rainbow = {
             module_path = "rainbow.internal",
             is_supported = function(lang)
-                return queries.get_query(lang, "highlights") ~= nil
+                return queries.get_query(lang, "parens") ~= nil
             end,
         },
     })

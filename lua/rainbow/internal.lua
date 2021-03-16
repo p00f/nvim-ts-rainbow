@@ -1,4 +1,5 @@
 local queries = require("nvim-treesitter.query")
+local parsers = require("nvim-treesitter.parsers")
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 local colors = require("rainbow.colors")
 local uv = vim.loop
@@ -24,7 +25,7 @@ local function color_no(mynode, len)
     end
 end
 
-local callbackfn = function(bufnr)
+local callbackfn = function(bufnr, parser, query)
     -- no need to do anything when pum is open
     if vim.fn.pumvisible() == 1 then
         return
@@ -32,12 +33,11 @@ local callbackfn = function(bufnr)
 
     --clear highlights or code commented out later has highlights too
     vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1)
-
-    local matches = queries.get_capture_matches(bufnr, "@punctuation.bracket", "highlights")
-    for _, node in ipairs(matches) do
+    local root_node = parser:parse()[1]:root()
+    for _, node, _ in query:iter_captures(root_node, bufnr) do
         -- set colour for this nesting level
-        local color_no_ = color_no(node.node, #colors)
-        local _, _, endRow, endCol = node.node:range() -- range of the capture, zero-indexed
+        local color_no_ = color_no(node, #colors)
+        local _, _, endRow, endCol = node:range() -- range of the capture, zero-indexed
         vim.highlight.range(
             bufnr,
             nsid,
@@ -50,7 +50,7 @@ local callbackfn = function(bufnr)
     end
 end
 
-local function try_async(f, bufnr)
+local function try_async(f, bufnr, parser, query)
     local cancel = false
     return function()
         if cancel then
@@ -58,7 +58,7 @@ local function try_async(f, bufnr)
         end
         local async_handle
         async_handle = uv.new_async(vim.schedule_wrap(function()
-            f(bufnr)
+            f(bufnr, parser, query)
             async_handle:close()
         end))
         async_handle:send()
@@ -74,14 +74,14 @@ local M = {}
 function M.attach(bufnr, lang)
     local hlmap = vim.treesitter.highlighter.hl_map
     hlmap["punctuation.bracket"] = nil
-
-    local query = queries.get_query(lang, "highlights")
+    local parser = parsers.get_parser(bufnr, lang)
+    local query = queries.get_query(lang, "parens")
     if not query then
         return
     end
-    local attachf, detachf = try_async(callbackfn, bufnr)
+    local attachf, detachf = try_async(callbackfn, bufnr, parser, query)
     Rainbow_state_table[bufnr] = detachf
-    callbackfn(bufnr) -- do it on attach
+    callbackfn(bufnr, parser, query) -- do it on attach
     vim.api.nvim_buf_attach(bufnr, false, { on_lines = attachf }) --do it on every change
 end
 
