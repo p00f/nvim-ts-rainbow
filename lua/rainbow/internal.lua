@@ -76,9 +76,7 @@ function M.attach(bufnr, lang)
         hlmap["punctuation.bracket"] = nil
         local parser = parsers.get_parser(bufnr, lang)
         local query = queries.get_query(lang, "parens")
-        if not query then
-                return
-        end
+
         local attachf, detachf = try_async(callbackfn, bufnr, parser, query)
         Rainbow_state_table[bufnr] = detachf
         callbackfn(bufnr, parser, query) -- do it on attach
