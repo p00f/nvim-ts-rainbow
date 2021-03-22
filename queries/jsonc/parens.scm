@@ -1,1 +1,1 @@
-; inherits: json
+[ "[" "]" "{" "}" ] @paren
