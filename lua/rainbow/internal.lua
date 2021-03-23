@@ -37,12 +37,12 @@ local callbackfn = function(bufnr, parser, query)
         for _, node, _ in query:iter_captures(root_node, bufnr) do
                 -- set colour for this nesting level
                 local color_no_ = color_no(node, #colors)
-                local _, _, endRow, endCol = node:range() -- range of the capture, zero-indexed
+                local _, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
                 vim.highlight.range(
                         bufnr,
                         nsid,
                         ("rainbowcol" .. color_no_),
-                        { endRow, endCol - 1 },
+                        { endRow, startCol },
                         { endRow, endCol - 1 },
                         "blockwise",
                         true
