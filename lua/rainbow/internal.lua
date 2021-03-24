@@ -4,11 +4,18 @@ local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 local colors = require("rainbow.colors")
 local uv = vim.loop
 
--- define highlight groups
-for i = 1, #colors do
-        local s = "highlight default rainbowcol" .. i .. " guifg=" .. colors[i]
-        vim.cmd(s)
+function init()
+	local guicolors = colors.guicolors()
+	local termcolors = colors.termcolors()
+	-- define highlight groups
+	for i = 1, colors.len() do
+		local s = "highlight default rainbowcol" .. i .. " guifg=" .. guicolors[i] .. " ctermfg=" .. termcolors[i]
+		print(s)
+		vim.cmd(s)
+	end
 end
+
+init()
 
 -- finds the nesting level of given node
 local function color_no(mynode, len)
@@ -36,7 +43,7 @@ local callbackfn = function(bufnr, parser, query)
         local root_node = parser:parse()[1]:root()
         for _, node, _ in query:iter_captures(root_node, bufnr) do
                 -- set colour for this nesting level
-                local color_no_ = color_no(node, #colors)
+                local color_no_ = color_no(node, colors.len())
                 local _, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
                 vim.highlight.range(
                         bufnr,
