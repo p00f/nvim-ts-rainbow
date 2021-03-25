@@ -8,7 +8,6 @@ local uv = vim.loop
 -- define highlight groups
 for i = 1, #colors do
 	local s = "highlight default rainbowcol" .. i .. " guifg=" .. colors[i] .. " ctermfg=" .. termcolors[i]
-	print(s)
 	vim.cmd(s)
 end
 
