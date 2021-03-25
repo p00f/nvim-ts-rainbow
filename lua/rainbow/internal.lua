@@ -2,12 +2,14 @@ local queries = require("nvim-treesitter.query")
 local parsers = require("nvim-treesitter.parsers")
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 local colors = require("rainbow.colors")
+local termcolors = require("rainbow.termcolors")
 local uv = vim.loop
 
 -- define highlight groups
 for i = 1, #colors do
-        local s = "highlight default rainbowcol" .. i .. " guifg=" .. colors[i]
-        vim.cmd(s)
+	local s = "highlight default rainbowcol" .. i .. " guifg=" .. colors[i] .. " ctermfg=" .. termcolors[i]
+	print(s)
+	vim.cmd(s)
 end
 
 -- finds the nesting level of given node
