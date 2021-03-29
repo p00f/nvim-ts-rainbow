@@ -18,10 +18,11 @@ end
 
 local function depths(node, tbl, counter)
         for child in node:iter_children() do
-                tbl[child] = counter
-                counter = counter + 1
+                local counter_copy = counter
+                tbl[child] = counter_copy
+                counter_copy = counter_copy + 1
                 if child:child_count() > 0 then
-                        depths(node, tbl, counter)
+                        depths(node, tbl, counter_copy)
                 end
         end
 end
