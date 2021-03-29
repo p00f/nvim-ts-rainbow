@@ -16,13 +16,13 @@ for i = 1, #colors do
         vim.cmd(s)
 end
 
-local function depths(node, tbl, counter)
+local function calculate_depths(node, tbl, counter)
         for child in node:iter_children() do
                 local counter_copy = counter
                 tbl[child] = counter_copy
                 counter_copy = counter_copy + 1
                 if child:child_count() > 0 then
-                        depths(node, tbl, counter_copy)
+                        calculate_depths(child, tbl, counter_copy)
                 end
         end
 end
@@ -37,17 +37,18 @@ local callbackfn = function(bufnr, parser, query)
         vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1)
 
         local root_node = parser:parse()[1]:root()
-        local depths_table = {}
-        local counter = 0
-        depths(root_node, depths_table, counter)
+        local counter = 1
+        local depths = {}
+        calculate_depths(root_node, depths, counter)
         for _, node, _ in query:iter_captures(root_node, bufnr) do
                 -- set colour for this nesting level
-                local depth = depths_table[node]
-                local color_no = nil
-                if (depth % #colors == 0) then
+                if depths[node] ~= nil then
+                local n_depth = depths[node]
+                local color_no = 1
+                if (n_depth % #colors == 0) then
                         color_no = #colors
                 else
-                        color_no = depth % #colors
+                        color_no = n_depth % #colors
                 end
                 local _, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
                 vim.highlight.range(
@@ -58,7 +59,7 @@ local callbackfn = function(bufnr, parser, query)
                         { endRow, endCol - 1 },
                         "blockwise",
                         true
-                )
+                ) end
         end
 end
 
