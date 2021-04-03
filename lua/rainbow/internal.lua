@@ -73,8 +73,6 @@ Rainbow_state_table = {} -- tracks which buffers have rainbow disabled
 local M = {}
 
 function M.attach(bufnr, lang)
-        local hlmap = vim.treesitter.highlighter.hl_map
-        hlmap["punctuation.bracket"] = nil
         local parser = parsers.get_parser(bufnr, lang)
         local query = queries.get_query(lang, "parens")
 
