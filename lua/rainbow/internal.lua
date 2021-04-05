@@ -42,20 +42,22 @@ local callbackfn = function(bufnr, parser)
 
                 local lang = lang_tree:lang()
                 local query = queries.get_query(lang, 'parens')
-                for _, node, _ in query:iter_captures(root_node, bufnr) do
-                        -- set colour for this nesting level
-                        local color_no_ = color_no(node, #colors)
-                        local _, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
-                        vim.highlight.range(
-                                bufnr,
-                                nsid,
-                                ("rainbowcol" .. color_no_),
-                                { endRow, startCol },
-                                { endRow, endCol - 1 },
-                                "blockwise",
-                                true
-                        )
-                end
+		if query ~= nil then
+			for _, node, _ in query:iter_captures(root_node, bufnr) do
+				-- set colour for this nesting level
+				local color_no_ = color_no(node, #colors)
+				local _, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
+				vim.highlight.range(
+					bufnr,
+					nsid,
+					("rainbowcol" .. color_no_),
+					{ endRow, startCol },
+					{ endRow, endCol - 1 },
+					"blockwise",
+					true
+				)
+			end
+		end
         end)
 end
 
