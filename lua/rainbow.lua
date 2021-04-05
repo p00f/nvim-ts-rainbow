@@ -1,5 +1,4 @@
 local queries = require("nvim-treesitter.query")
-local configs = require("nvim-treesitter.configs")
 
 local M = {}
 
@@ -10,6 +9,7 @@ function M.init()
                         is_supported = function(lang)
                                 return queries.get_query(lang, "parens") ~= nil
                         end,
+                        extended_mode = true,
                 },
         })
 end

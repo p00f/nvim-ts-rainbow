@@ -1,5 +1,7 @@
 local queries = require("nvim-treesitter.query")
+local nvim_query = require("vim.treesitter.query")
 local parsers = require("nvim-treesitter.parsers")
+local configs = require("nvim-treesitter.configs")
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 local colors = require("rainbow.colors")
 local termcolors = require("rainbow.termcolors")
@@ -78,8 +80,26 @@ Rainbow_state_table = {} -- tracks which buffers have rainbow disabled
 
 local M = {}
 
+local extended_languages = {'latex'}
+
+local function register_predicates(config)
+        for _, lang in ipairs(extended_languages) do
+                local enable_extended_mode
+                if type(config.extended_mode) == 'table' then
+                       enable_extended_mode = config.extended_mode[lang]
+                else
+                       enable_extended_mode = config.extended_mode
+                end
+                nvim_query.add_predicate(lang.."-extended-rainbow-mode?", function()
+                        return enable_extended_mode
+                end, true)
+        end
+end
+
 function M.attach(bufnr, lang)
         local parser = parsers.get_parser(bufnr, lang)
+        local config = configs.get_module("rainbow")
+        register_predicates(config)
 
         local attachf, detachf = try_async(callbackfn, bufnr, parser)
         Rainbow_state_table[bufnr] = detachf
