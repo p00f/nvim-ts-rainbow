@@ -38,6 +38,6 @@ The screenshots below use a different colorscheme
 ![alt text](https://raw.githubusercontent.com/p00f/nvim-ts-rainbow/master/screenshots/cpp.png)
  - Latex (with tag begin-end matching)
 
-![alt text](https://raw.githubusercontent.com/p00f/nvim-ts-rainbow/master/screenshots/latex.png)
+![alt text](https://raw.githubusercontent.com/p00f/nvim-ts-rainbow/master/screenshots/latex_.png)
 ## Credits
 Huge thanks to @vigoux, @theHamsta, @sogaiu, @bfredl and @sunjon and @steelsojka for all their help
