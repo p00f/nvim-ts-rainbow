@@ -24,12 +24,20 @@ To change the colours, edit `lua/rainbow/colors.lua`. If you want to override on
 hi rainbowcol1 guifg=#123456
 ```
 ## Screenshots
+ - Java
+
 ![alt text](https://raw.githubusercontent.com/p00f/nvim-ts-rainbow/master/screenshots/java.png)
+
 The screenshots below use a different colorscheme
+ - Fennel:
+
 ![alt text](https://raw.githubusercontent.com/p00f/nvim-ts-rainbow/master/screenshots/fnlwezterm.png)
 ![alt text](https://raw.githubusercontent.com/p00f/nvim-ts-rainbow/master/screenshots/fnltreesitter.png)
+ - C++:
+
 ![alt text](https://raw.githubusercontent.com/p00f/nvim-ts-rainbow/master/screenshots/cpp.png)
-Latex tag begin-end matching
+ - Latex (with tag begin-end matching)
+
 ![alt text](https://raw.githubusercontent.com/p00f/nvim-ts-rainbow/master/screenshots/latex.png)
 ## Credits
 Huge thanks to @vigoux, @theHamsta, @sogaiu, @bfredl and @sunjon and @steelsojka for all their help
