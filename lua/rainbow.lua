@@ -1,3 +1,4 @@
+print("hello world")
 local queries = require("nvim-treesitter.query")
 
 local M = {}
