@@ -5,11 +5,17 @@ local configs = require("nvim-treesitter.configs")
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 local colors = require("rainbow.colors")
 local termcolors = require("rainbow.termcolors")
-local uv = vim.loop
+local extended_languages = { "latex" }
+local state_table = {} -- tracks which buffers have rainbow disabled
 
 -- define highlight groups
 for i = 1, #colors do
-        local s = "highlight default rainbowcol" .. i .. " guifg=" .. colors[i] .. " ctermfg=" .. termcolors[i]
+        local s = "highlight default rainbowcol"
+                .. i
+                .. " guifg="
+                .. colors[i]
+                .. " ctermfg="
+                .. termcolors[i]
         vim.cmd(s)
 end
 
@@ -41,23 +47,23 @@ local callbackfn = function(bufnr, parser)
                 local root_node = tree:root()
 
                 local lang = lang_tree:lang()
-                local query = queries.get_query(lang, 'parens')
-		if query ~= nil then
-			for _, node, _ in query:iter_captures(root_node, bufnr) do
-				-- set colour for this nesting level
-				local color_no_ = color_no(node, #colors)
-				local _, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
-				vim.highlight.range(
-					bufnr,
-					nsid,
-					("rainbowcol" .. color_no_),
-					{ endRow, startCol },
-					{ endRow, endCol - 1 },
-					"blockwise",
-					true
-				)
-			end
-		end
+                local query = queries.get_query(lang, "parens")
+                if query ~= nil then
+                        for _, node, _ in query:iter_captures(root_node, bufnr) do
+                                -- set colour for this nesting level
+                                local color_no_ = color_no(node, #colors)
+                                local _, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
+                                vim.highlight.range(
+                                        bufnr,
+                                        nsid,
+                                        ("rainbowcol" .. color_no_),
+                                        { endRow, startCol },
+                                        { endRow, endCol - 1 },
+                                        "blockwise",
+                                        true
+                                )
+                        end
+                end
         end)
 end
 
@@ -68,7 +74,7 @@ local function try_async(f, bufnr, parser)
                         return true
                 end
                 local async_handle
-                async_handle = uv.new_async(vim.schedule_wrap(function()
+                async_handle = vim.loop.new_async(vim.schedule_wrap(function()
                         f(bufnr, parser)
                         async_handle:close()
                 end))
@@ -78,25 +84,21 @@ local function try_async(f, bufnr, parser)
         end
 end
 
-Rainbow_state_table = {} -- tracks which buffers have rainbow disabled
-
-local M = {}
-
-local extended_languages = {'latex'}
-
 local function register_predicates(config)
         for _, lang in ipairs(extended_languages) do
                 local enable_extended_mode
-                if type(config.extended_mode) == 'table' then
-                       enable_extended_mode = config.extended_mode[lang]
+                if type(config.extended_mode) == "table" then
+                        enable_extended_mode = config.extended_mode[lang]
                 else
-                       enable_extended_mode = config.extended_mode
+                        enable_extended_mode = config.extended_mode
                 end
-                nvim_query.add_predicate(lang.."-extended-rainbow-mode?", function()
+                nvim_query.add_predicate(lang .. "-extended-rainbow-mode?", function()
                         return enable_extended_mode
                 end, true)
         end
 end
+
+local M = {}
 
 function M.attach(bufnr, lang)
         local parser = parsers.get_parser(bufnr, lang)
@@ -104,13 +106,13 @@ function M.attach(bufnr, lang)
         register_predicates(config)
 
         local attachf, detachf = try_async(callbackfn, bufnr, parser)
-        Rainbow_state_table[bufnr] = detachf
+        state_table[bufnr] = detachf
         callbackfn(bufnr, parser) -- do it on attach
         vim.api.nvim_buf_attach(bufnr, false, { on_lines = attachf }) --do it on every change
 end
 
 function M.detach(bufnr)
-        local detachf = Rainbow_state_table[bufnr]
+        local detachf = state_table[bufnr]
         detachf()
         local hlmap = vim.treesitter.highlighter.hl_map
         hlmap["punctuation.bracket"] = "TSPunctBracket"

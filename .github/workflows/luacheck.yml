@@ -13,4 +13,4 @@ jobs:
       run: |
         sudo apt-get install luarocks
         luarocks install --local luacheck
-        /home/runner/.luarocks/bin/luacheck . -q --globals "vim" --allow-defined
+        /home/runner/.luarocks/bin/luacheck . -q --globals "vim" --allow-defined-top
