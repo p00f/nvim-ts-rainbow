@@ -1,11 +1,16 @@
 name: luacheck
 on:
-  # Lines below let you run workflow manually and on each commit
-  push: {branches: ["master", "main"]}
-  workflow_dispatch:
+  push: {branches: ["master"]}
+  pull_request:
+    types: [opened, synchronize, reopened]
+
 jobs:
-  github-metrics:
+  luacheck:
     runs-on: ubuntu-latest
     steps:
-      # See action.yml for all options
-      - uses: nebularg/actions-luacheck@v1.1.0
+    - uses: actions/checkout@v1
+    - name: Install and run Luacheck
+      run: |
+        sudo apt-get install luarocks
+        luarocks install --local luacheck
+        /home/runner/.luarocks/bin/luacheck . -q --globals "vim" --allow-defined-top
