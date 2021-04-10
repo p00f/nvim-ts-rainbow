@@ -7,6 +7,19 @@ local colors = require("rainbow.colors")
 local termcolors = require("rainbow.termcolors")
 local uv = vim.loop
 
+local extended_languages = {
+        'bash',
+        'html',
+        'jsx',
+        'latex',
+        'lua',
+        'ocaml',
+        'ruby',
+        'verilog',
+        'json',
+        'yaml'
+}
+
 -- define highlight groups
 for i = 1, #colors do
         local s = "highlight default rainbowcol" .. i .. " guifg=" .. colors[i] .. " ctermfg=" .. termcolors[i]
@@ -14,11 +27,13 @@ for i = 1, #colors do
 end
 
 -- finds the nesting level of given node
-local function color_no(mynode, len)
+local function color_no(mynode, len, levels)
         local counter = 0
-        local current = mynode
+        local current = mynode:parent() -- we don't want to count the current node
         while current:parent() ~= nil do
-                counter = counter + 1
+                if levels[current:type()] then
+                        counter = counter + 1
+                end
                 current = current:parent()
         end
         if (counter % len == 0) then
@@ -26,6 +41,17 @@ local function color_no(mynode, len)
         else
                 return (counter % len)
         end
+end
+
+-- get the rainbow level nodes for a specific syntax
+local function get_rainbow_levels(bufnr, root, lang)
+        local matches = queries.get_capture_matches(bufnr, '@rainbow.level', 'rainbow', root, lang)
+        local levels = {}
+        for _, node in ipairs(matches) do
+                levels[node.node:type()] = true
+        end
+
+        return levels
 end
 
 local callbackfn = function(bufnr, parser)
@@ -41,23 +67,27 @@ local callbackfn = function(bufnr, parser)
                 local root_node = tree:root()
 
                 local lang = lang_tree:lang()
-                local query = queries.get_query(lang, 'parens')
-		if query ~= nil then
-			for _, node, _ in query:iter_captures(root_node, bufnr) do
-				-- set colour for this nesting level
-				local color_no_ = color_no(node, #colors)
-				local _, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
-				vim.highlight.range(
-					bufnr,
-					nsid,
-					("rainbowcol" .. color_no_),
-					{ endRow, startCol },
-					{ endRow, endCol - 1 },
-					"blockwise",
-					true
-				)
-			end
-		end
+                local query = queries.get_query(lang, 'rainbow')
+                local levels = get_rainbow_levels(bufnr, root_node, lang)
+
+                if query ~= nil then
+                        for capture, node, _ in query:iter_captures(root_node, bufnr) do
+                                if query.captures[capture] == 'rainbow.paren' then
+                                        -- set colour for this nesting level
+                                        local color_no_ = color_no(node, #colors, levels)
+                                        local _, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
+                                        vim.highlight.range(
+                                                bufnr,
+                                                nsid,
+                                                "rainbowcol" .. color_no_,
+                                                { endRow, startCol },
+                                                { endRow, endCol - 1 },
+                                                "blockwise",
+                                                true
+                                        )
+                                end
+                        end
+                end
         end)
 end
 
@@ -81,8 +111,6 @@ end
 Rainbow_state_table = {} -- tracks which buffers have rainbow disabled
 
 local M = {}
-
-local extended_languages = {'latex'}
 
 local function register_predicates(config)
         for _, lang in ipairs(extended_languages) do
