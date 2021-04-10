@@ -5,9 +5,7 @@ local configs = require("nvim-treesitter.configs")
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 local colors = require("rainbow.colors")
 local termcolors = require("rainbow.termcolors")
-local extended_languages = { "latex" }
 local state_table = {} -- tracks which buffers have rainbow disabled
-
 local extended_languages = {
         'bash',
         'html',
@@ -81,7 +79,8 @@ local callbackfn = function(bufnr, parser)
                                 if query.captures[capture] == 'rainbow.paren' then
                                         -- set colour for this nesting level
                                         local color_no_ = color_no(node, #colors, levels)
-                                        local _, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
+                                        -- range of the capture, zero-indexed
+                                        local _, startCol, endRow, endCol = node:range()
                                         vim.highlight.range(
                                                 bufnr,
                                                 nsid,
