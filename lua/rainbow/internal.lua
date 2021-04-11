@@ -101,8 +101,13 @@ end
 local M = {}
 
 function M.attach(bufnr, lang)
-        local parser = parsers.get_parser(bufnr, lang)
         local config = configs.get_module("rainbow")
+	local max_file_lines = config.max_file_lines
+	if max_file_lines ~= nil and vim.api.nvim_buf_line_count(bufnr) > max_file_lines then
+		return
+	end
+
+        local parser = parsers.get_parser(bufnr, lang)
         register_predicates(config)
 
         local attachf, detachf = try_async(callbackfn, bufnr, parser)
