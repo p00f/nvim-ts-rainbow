@@ -3,7 +3,6 @@ local nvim_query = require("vim.treesitter.query")
 local parsers = require("nvim-treesitter.parsers")
 local configs = require("nvim-treesitter.configs")
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
--- local colors = require("rainbow.colors")
 local termcolors = require("rainbow.termcolors")
 local extended_languages = { "latex" }
 local state_table = {} -- tracks which buffers have rainbow disabled
