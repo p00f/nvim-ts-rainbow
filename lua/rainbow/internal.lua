@@ -3,10 +3,23 @@ local nvim_query = require("vim.treesitter.query")
 local parsers = require("nvim-treesitter.parsers")
 local configs = require("nvim-treesitter.configs")
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
-local colors = require("rainbow.colors")
+-- local colors = require("rainbow.colors")
 local termcolors = require("rainbow.termcolors")
 local extended_languages = { "latex" }
 local state_table = {} -- tracks which buffers have rainbow disabled
+
+-- Try to set colors from config
+local function set_colors(configs)
+	local config = configs.get_module("rainbow")
+
+	if config.colors ~= nil and type(config.colors) == "table" then
+		return config.colors
+	else
+		return require("rainbow.colors")
+	end
+end
+
+local colors = set_colors(configs)
 
 -- define highlight groups
 for i = 1, #colors do
@@ -14,8 +27,8 @@ for i = 1, #colors do
                 .. i
                 .. " guifg="
                 .. colors[i]
-                .. " ctermfg="
-                .. termcolors[i]
+                --.. " ctermfg="
+                --.. termcolors[i]
         vim.cmd(s)
 end
 
