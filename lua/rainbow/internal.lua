@@ -26,8 +26,8 @@ for i = 1, #colors do
                 .. i
                 .. " guifg="
                 .. colors[i]
-                --.. " ctermfg="
-                --.. termcolors[i]
+                .. " ctermfg="
+                .. termcolors[i]
         vim.cmd(s)
 end
 
