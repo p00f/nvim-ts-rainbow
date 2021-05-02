@@ -23,16 +23,16 @@ I've used the gruvbox palette because it is nice and subtle. I wanted to use VIB
 To change the colors you can edit `lua/rainbow/colors.lua` or add following code to setup
 ```lua
 require'nvim-treesitter.configs'.setup{
-	rainbow = {
-		-- Setting colors
-		colors = {
-			-- Colors here
-		},
-		-- Term colors
-		termcolors = {
-			-- Term colors here
-		}
-	},
+  rainbow = {
+    -- Setting colors
+    colors = {
+      -- Colors here
+    },
+    -- Term colors
+    termcolors = {
+      -- Term colors here
+    }
+  },
 }
 ```
 
