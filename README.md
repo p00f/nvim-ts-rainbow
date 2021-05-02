@@ -36,7 +36,7 @@ require'nvim-treesitter.configs'.setup{
 }
 ```
 
-To change the colours, edit `lua/rainbow/colors.lua`. If you want to override only a *few* colours (you can only change colours 1 through 7 this way), you can do it in your init.vim: (thanks @delphinus !)
+If you want to override only a *few* colours (you can only change colours 1 through 7 this way), you can do it in your init.vim: (thanks @delphinus !)
 ```vim
 hi rainbowcol1 guifg=#123456
 ```
