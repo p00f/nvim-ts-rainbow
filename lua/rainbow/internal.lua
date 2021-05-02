@@ -8,17 +8,18 @@ local extended_languages = { "latex" }
 local state_table = {} -- tracks which buffers have rainbow disabled
 
 -- Try to set colors from config
-local function set_colors(configs)
-	local config = configs.get_module("rainbow")
+local function set_colors(conf, name)
+	local config = conf.get_module("rainbow")
 
-	if config.colors ~= nil and type(config.colors) == "table" then
-		return config.colors
+	if config[name] ~= nil and type(config[name]) == "table" then
+		return config[name]
 	else
-		return require("rainbow.colors")
+		return require("rainbow."..name)
 	end
 end
 
-local colors = set_colors(configs)
+local colors = set_colors(configs, "colors")
+local termcolors = set_colors(configs, "termcolors")
 
 -- define highlight groups
 for i = 1, #colors do
