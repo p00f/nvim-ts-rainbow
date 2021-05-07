@@ -27,7 +27,7 @@ local function color_no(mynode, len)
                 counter = counter + 1
                 current = current:parent()
         end
-        if (counter % len == 0) then
+        if counter % len == 0 then
                 return len
         else
                 return (counter % len)
@@ -36,51 +36,40 @@ end
 
 local callbackfn = function(bufnr, changes, tree, lang)
         --vim.schedule_wrap(function()
-                -- no need to do anything when pum is open
-                if vim.fn.pumvisible() == 1 or not lang then
-                        return
-                end
+        -- no need to do anything when pum is open
+        if vim.fn.pumvisible() == 1 or not lang then
+                return
+        end
 
-                for _, change in ipairs(changes) do
-                        ----clear highlights or code commented out later has highlights too
-                        -- vim.api.nvim_buf_clear_namespace(bufnr, nsid, change[1], change[3])
-                        local root_node =  tree:root()
-                        local query = queries.get_query(lang, "parens")
-                        if query ~= nil then
-                                for _, node, _ in query:iter_captures(root_node, bufnr, change[1], change[3] + 1) do
-                                        -- set colour for this nesting level
-                                 if not node:has_error() then
-                                         local color_no_ = color_no(node, #colors)
-                                         local startRow, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
-                                         vim.highlight.range(
-                                                 bufnr,
-                                                 nsid,
-                                                 ("rainbowcol" .. color_no_),
-                                                 { startRow, startCol },
-                                                 { startRow, startCol },
-                                                 "blockwise",
-                                                 true
-                                         )
-                                         vim.highlight.range(
-                                                 bufnr,
-                                                 nsid,
-                                                 ("rainbowcol" .. color_no_),
-                                                 { endRow, endCol - 1 },
-                                                 { endRow, endCol - 1 },
-                                                 "blockwise",
-                                                 true
-                                         )
-                                 end
+        for _, change in ipairs(changes) do
+                ----clear highlights or code commented out later has highlights too
+                -- vim.api.nvim_buf_clear_namespace(bufnr, nsid, change[1], change[3])
+                local root_node = tree:root()
+                local query = queries.get_query(lang, "parens")
+                if query ~= nil then
+                        for _, node, _ in query:iter_captures(root_node, bufnr, change[1], change[3] + 1) do
+                                -- set colour for this nesting level
+                                if not node:has_error() then
+                                        local color_no_ = color_no(node, #colors)
+                                        local startRow, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
+                                        vim.highlight.range(bufnr, nsid, ("rainbowcol" .. color_no_), {
+                                                startRow,
+                                                startCol,
+                                        }, {
+                                                endRow,
+                                                endCol - 1,
+                                        }, "blockwise", true)
                                 end
                         end
                 end
+        end
         --end)()
 end
 
 local function full_update(bufnr)
         local parser = parsers.get_parser(bufnr)
         parser:for_each_tree(function(tree, sub_parser)
-                callbackfn(bufnr, {{tree:root():range()}}, tree, sub_parser:lang())
+                callbackfn(bufnr, { { tree:root():range() } }, tree, sub_parser:lang())
         end)
 end
 
@@ -110,7 +99,11 @@ function M.attach(bufnr, lang)
         --callbackfn(bufnr, parser) -- do it on attach
 
         full_update(bufnr)
-        parser:register_cbs({on_changedtree = function(changes, tree) callbackfn(bufnr, changes, tree, lang) end})
+        parser:register_cbs({
+                on_changedtree = function(changes, tree)
+                        callbackfn(bufnr, changes, tree, lang)
+                end,
+        })
         --vim.api.nvim_buf_attach(bufnr, false, { on_lines = attachf }) --do it on every change
 end
 
