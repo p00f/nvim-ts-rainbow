@@ -4,7 +4,6 @@ local parsers = require("nvim-treesitter.parsers")
 local configs = require("nvim-treesitter.configs")
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 local extended_languages = { "latex" }
-local state_table = {} -- tracks which buffers have rainbow disabled
 
 -- Try to set colors from config
 local function set_colors(conf, name)
@@ -46,54 +45,49 @@ local function color_no(mynode, len)
     end
 end
 
-local callbackfn = function(bufnr, parser)
+local function callbackfn(bufnr, changes, tree, lang)
+    --vim.schedule_wrap(function()
     -- no need to do anything when pum is open
-    if vim.fn.pumvisible() == 1 then
+    if vim.fn.pumvisible() == 1 or not lang then
         return
     end
 
-    --clear highlights or code commented out later has highlights too
-    vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1)
-    parser:parse()
-    parser:for_each_tree(function(tree, lang_tree)
+    for _, change in ipairs(changes) do
+        ----clear highlights or code commented out later has highlights too
+        -- vim.api.nvim_buf_clear_namespace(bufnr, nsid, change[1], change[3])
         local root_node = tree:root()
-
-        local lang = lang_tree:lang()
         local query = queries.get_query(lang, "parens")
         if query ~= nil then
-            for _, node, _ in query:iter_captures(root_node, bufnr) do
+            for _, node, _ in query:iter_captures(root_node, bufnr, change[1], change[3] + 1) do
                 -- set colour for this nesting level
-                local color_no_ = color_no(node, #colors)
-                local _, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
-                vim.highlight.range(
-                    bufnr,
-                    nsid,
-                    ("rainbowcol" .. color_no_),
-                    { endRow, startCol },
-                    { endRow, endCol - 1 },
-                    "blockwise",
-                    true
-                )
+                if not node:has_error() then
+                    local color_no_ = color_no(node, #colors)
+                    local startRow, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
+                    vim.highlight.range(bufnr, nsid, ("rainbowcol" .. color_no_), {
+                        startRow,
+                        startCol,
+                    }, {
+                        startRow,
+                        startCol,
+                    }, "blockwise", true)
+                    vim.highlight.range(bufnr, nsid, ("rainbowcol" .. color_no_), {
+                        endRow,
+                        endCol - 1,
+                    }, {
+                        endRow,
+                        endCol - 1,
+                    }, "blockwise", true)
+                end
             end
         end
-    end)
+    end
 end
 
-local function try_async(f, bufnr, parser)
-    local cancel = false
-    return function()
-        if cancel then
-            return true
-        end
-        local async_handle
-        async_handle = vim.loop.new_async(vim.schedule_wrap(function()
-            f(bufnr, parser)
-            async_handle:close()
-        end))
-        async_handle:send()
-    end, function()
-        cancel = true
-    end
+local function full_update(bufnr)
+    local parser = parsers.get_parser(bufnr)
+    parser:for_each_tree(function(tree, sub_parser)
+        callbackfn(bufnr, { { tree:root():range() } }, tree, sub_parser:lang())
+    end)
 end
 
 local function register_predicates(config)
@@ -110,27 +104,32 @@ local function register_predicates(config)
     end
 end
 
+local state_table = {}
+local function enable_or_disable(bufnr, state, parser, lang)
+    state_table[bufnr] = state
+    if state then
+        full_update(bufnr)
+        parser:register_cbs({
+            on_changedtree = function(changes, tree)
+                if state_table[bufnr] == true then
+                    callbackfn(bufnr, changes, tree, lang)
+                end
+            end,
+        })
+    end
+end
+
 local M = {}
 
 function M.attach(bufnr, lang)
-    local config = configs.get_module("rainbow")
-    local max_file_lines = config.max_file_lines
-    if max_file_lines ~= nil and vim.api.nvim_buf_line_count(bufnr) > max_file_lines then
-        return
-    end
-
     local parser = parsers.get_parser(bufnr, lang)
+    local config = configs.get_module("rainbow")
     register_predicates(config)
-
-    local attachf, detachf = try_async(callbackfn, bufnr, parser)
-    state_table[bufnr] = detachf
-    callbackfn(bufnr, parser) -- do it on attach
-    vim.api.nvim_buf_attach(bufnr, false, { on_lines = attachf }) --do it on every change
+    enable_or_disable(bufnr, true, parser, lang)
 end
 
 function M.detach(bufnr)
-    local detachf = state_table[bufnr]
-    detachf()
+    enable_or_disable(bufnr, false)
     local hlmap = vim.treesitter.highlighter.hl_map
     hlmap["punctuation.bracket"] = "TSPunctBracket"
     vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1)
