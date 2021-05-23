@@ -55,6 +55,13 @@ local function callbackfn(bufnr, changes, tree, lang)
                         startRow,
                         startCol,
                     }, {
+                        startRow,
+                        startCol,
+                    }, "blockwise", true)
+                    vim.highlight.range(bufnr, nsid, ("rainbowcol" .. color_no_), {
+                        endRow,
+                        endCol - 1,
+                    }, {
                         endRow,
                         endCol - 1,
                     }, "blockwise", true)
@@ -62,7 +69,6 @@ local function callbackfn(bufnr, changes, tree, lang)
             end
         end
     end
-    --end)()
 end
 
 local function full_update(bufnr)
@@ -88,19 +94,16 @@ end
 
 local state_table = {}
 local function enable_or_disable(bufnr, state, parser, lang)
-    if parser and state then
-        state_table[bufnr] = { parser, state } -- could very well write `true` in place of `state` since parser is only supplied when state is true
-    end
+    state_table[bufnr] = state
     if state then
-        state_table[bufnr][1] = parser
         full_update(bufnr)
         parser:register_cbs({
             on_changedtree = function(changes, tree)
-                callbackfn(bufnr, changes, tree, lang)
+                if state_table[bufnr] == true then
+                    callbackfn(bufnr, changes, tree, lang)
+                end
             end,
         })
-    else
-        state_table[bufnr][1]:invalidate(false)
     end
 end
 
