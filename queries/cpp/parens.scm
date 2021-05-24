@@ -1,1 +1,1 @@
-["{" "}" "[" "]" "(" ")"] @paren
+; inherits: c,angle

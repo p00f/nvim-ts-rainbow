@@ -1,7 +1,7 @@
-[ "{" "}" "[" "]" "(" ")"] @paren
+; inherits: square,round,curly
 (type_arguments
-  "<" @paren
-  ">" @paren)
+  "<" @left
+  ">" @right)
 (type_parameters
-  "<" @paren
-  ">" @paren)
+  "<" @left
+  ">" @right)

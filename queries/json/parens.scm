@@ -1,2 +1,1 @@
-; [ "[" "]" "{" "}" ] @paren
-[ (_ "{" "}") (_ "[" "]")] @paren
+; inherits: square,curly

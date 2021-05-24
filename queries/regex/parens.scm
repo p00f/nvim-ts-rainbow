@@ -1,12 +1,7 @@
-[
- "("
- ")"
- "(?"
+; inherits: square,round,curly
+["(?"
  "(?:"
  "(?<"
- ">"
- "["
- "]"
- "{"
- "}"
-] @paren
+ ">"] @paren
+
+; TODO:

@@ -46,15 +46,14 @@ local function color_no(mynode, len)
 end
 
 local function callbackfn(bufnr, changes, tree, lang)
-    --vim.schedule_wrap(function()
-    -- no need to do anything when pum is open
     if vim.fn.pumvisible() == 1 or not lang then
         return
     end
 
     for _, change in ipairs(changes) do
         ----clear highlights or code commented out later has highlights too
-        -- vim.api.nvim_buf_clear_namespace(bufnr, nsid, change[1], change[3])
+        vim.api.nvim_buf_clear_namespace(bufnr, nsid, change[1], change[3]+1)
+
         local root_node = tree:root()
         local query = queries.get_query(lang, "parens")
         if query ~= nil then
@@ -66,13 +65,6 @@ local function callbackfn(bufnr, changes, tree, lang)
                     vim.highlight.range(bufnr, nsid, ("rainbowcol" .. color_no_), {
                         startRow,
                         startCol,
-                    }, {
-                        startRow,
-                        startCol,
-                    }, "blockwise", true)
-                    vim.highlight.range(bufnr, nsid, ("rainbowcol" .. color_no_), {
-                        endRow,
-                        endCol - 1,
                     }, {
                         endRow,
                         endCol - 1,

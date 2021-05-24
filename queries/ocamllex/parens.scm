@@ -1,2 +1,2 @@
-(character_set ["[" "]"] @paren)
-(parenthesized_regexp ["(" ")"] @paren)
+(character_set ["[" @left "]" @right])
+(parenthesized_regexp ["(" @left ")" @right])

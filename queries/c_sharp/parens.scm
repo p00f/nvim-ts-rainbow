@@ -1,10 +1,1 @@
-[
- "["
- "]"
- "{"
- "}"
- "("
- ")"
- "<"
- ">"
-] @paren
+; inherits: square,round,curly,angle

@@ -1,5 +1,10 @@
-["{" "}" "[" "]" "(" ")"] @paren
+; inherits: round,curly,square
+(_
+  "[[" @left
+  "]]" @right)
 (command_substitution
-  [ "$(" ")" ] @paren)
+  "$(" @left
+  ")" @right)
 (expansion
-  [ "${" "}" ] @paren)
+  "${" @left
+  "}" @right)
