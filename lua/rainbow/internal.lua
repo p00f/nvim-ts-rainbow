@@ -118,7 +118,7 @@ function M.attach(bufnr, lang)
 end
 
 function M.detach(bufnr)
-    state_table[bufnr] =false
+    state_table[bufnr] = false
     local hlmap = vim.treesitter.highlighter.hl_map
     hlmap["punctuation.bracket"] = "TSPunctBracket"
     vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1)
