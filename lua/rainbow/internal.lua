@@ -97,19 +97,6 @@ local function register_predicates(config)
 end
 
 local state_table = {}
-local function enable_or_disable(bufnr, state, parser, lang)
-    state_table[bufnr] = state
-    if state then
-        full_update(bufnr)
-        parser:register_cbs({
-            on_changedtree = function(changes, tree)
-                if state_table[bufnr] == true then
-                    callbackfn(bufnr, changes, tree, lang)
-                end
-            end,
-        })
-    end
-end
 
 local M = {}
 
@@ -117,11 +104,21 @@ function M.attach(bufnr, lang)
     local parser = parsers.get_parser(bufnr, lang)
     local config = configs.get_module("rainbow")
     register_predicates(config)
-    enable_or_disable(bufnr, true, parser, lang)
+    full_update(bufnr)
+    parser:register_cbs({
+        on_changedtree = function(changes, tree)
+            if state_table[bufnr] == true then
+                callbackfn(bufnr, changes, tree, lang)
+            else
+                return
+            end
+        end,
+    })
+    state_table[bufnr] = true
 end
 
 function M.detach(bufnr)
-    enable_or_disable(bufnr, false)
+    state_table[bufnr] =false
     local hlmap = vim.treesitter.highlighter.hl_map
     hlmap["punctuation.bracket"] = "TSPunctBracket"
     vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1)
