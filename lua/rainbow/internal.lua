@@ -105,6 +105,7 @@ function M.attach(bufnr, lang)
     local config = configs.get_module("rainbow")
     register_predicates(config)
     full_update(bufnr)
+    state_table[bufnr] = true
     parser:register_cbs({
         on_changedtree = function(changes, tree)
             if state_table[bufnr] == true then
@@ -114,7 +115,6 @@ function M.attach(bufnr, lang)
             end
         end,
     })
-    state_table[bufnr] = true
 end
 
 function M.detach(bufnr)
