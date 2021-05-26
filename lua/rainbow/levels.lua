@@ -53,4 +53,14 @@ return {
         template_parameter_list = true,
         template_type = true,
     },
+    fennel = {
+        let_definition = true,
+        function_definition = true,
+        assignments = true,
+        table = true,
+        sequential_table = true,
+        function_call = true,
+        parameters = true,
+        require = true,
+    }
 }
