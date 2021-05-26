@@ -1,4 +1,11 @@
-; inherits: c,angle
+; inherits: c
+
+(template_argument_list
+  "<" @left ">" @right)
+
+(template_parameter_list
+  "<" @left ">" @right)
+
 [
   (array_declarator)
   (call_expression)
@@ -9,7 +16,6 @@
   (parameter_list)
   (condition_clause)
   (template_parameter_list)
-  (declaration_list)]
-@rainbow.level
+  (declaration_list) ] @rainbow.level
 
 (type_definition (template_type) @rainbow.level)

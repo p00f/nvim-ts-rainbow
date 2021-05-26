@@ -3,7 +3,7 @@ local nvim_query = require("vim.treesitter.query")
 local parsers = require("nvim-treesitter.parsers")
 local configs = require("nvim-treesitter.configs")
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
-local extended_languages = { "latex" }
+local extended_languages = { "latex", "lua" }
 
 -- Try to set colors from config
 local function set_colors(conf, name)
@@ -48,7 +48,7 @@ local function color_no(mynode, len, levels)
 end
 
 local function get_rainbow_levels(bufnr, root, lang)
-    local matches = queries.get_capture_matches(bufnr, "@rainbow.level", "rainbow", root, lang)
+    local matches = queries.get_capture_matches(bufnr, "@rainbow.level", "parens", root, lang)
     local levels = {}
     for _, node in ipairs(matches) do
         levels[node.node:type()] = true
