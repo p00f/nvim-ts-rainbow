@@ -33,7 +33,7 @@ end
 -- finds the nesting level of given node
 local function color_no(mynode, len)
     local counter = 0
-    local current = mynode
+    local current = mynode:parent()
     while current:parent() ~= nil do
         counter = counter + 1
         current = current:parent()
