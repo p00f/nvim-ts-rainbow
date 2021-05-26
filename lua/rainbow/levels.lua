@@ -33,6 +33,7 @@ return {
         table = true,
         variable_declaration = true,
         while_statement = true,
+        binary_operation = true,
     },
     query = {
         grouping = true,
@@ -54,13 +55,20 @@ return {
         template_type = true,
     },
     fennel = {
-        let_definition = true,
-        function_definition = true,
         assignments = true,
-        table = true,
-        sequential_table = true,
+        do_statement = true,
+        each = true,
+        each_clause = true,
         function_call = true,
+        function_definition = true,
+        let_definition = true,
         parameters = true,
         require = true,
-    }
+        sequential_table = true,
+        table = true,
+        when_statement =  true,
+        set = true,
+        if_statement = true,
+        var_definition = true,
+    },
 }
