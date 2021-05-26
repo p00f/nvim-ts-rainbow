@@ -4,7 +4,9 @@
 (_ "\\(" @left "\\)" @right)
 
 ; TODO: broken
-(_
- "\\begin" @left
- "\\end" @right
- (#latex-extended-rainbow-mode?))
+[
+ "\\begin"
+ (#latex-extended-rainbow-mode?)] @left
+[
+ "\\end"
+ (#latex-extended-rainbow-mode?)] @right
