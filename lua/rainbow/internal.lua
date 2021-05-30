@@ -35,7 +35,11 @@ local function color_no(mynode, len, levels)
     local counter = 0
     local current = mynode:parent() -- we don't want to count the current node
     while current:parent() ~= nil do
-        if levels[current:type()] then
+        if levels then
+            if levels[current:type()] then
+                counter = counter + 1
+            end
+        else
             counter = counter + 1
         end
         current = current:parent()
