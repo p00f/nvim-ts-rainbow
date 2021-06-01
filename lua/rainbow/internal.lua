@@ -31,11 +31,17 @@ for i = 1, #colors do
 end
 
 -- finds the nesting level of given node
-local function color_no(mynode, len)
+local function color_no(mynode, len, levels)
     local counter = 0
-    local current = mynode:parent()
+    local current = mynode:parent() -- we don't want to count the current node
     while current:parent() ~= nil do
-        counter = counter + 1
+        if levels then
+            if levels[current:type()] then
+                counter = counter + 1
+            end
+        else
+            counter = counter + 1
+        end
         current = current:parent()
     end
     if counter % len == 0 then
@@ -56,11 +62,12 @@ local function callbackfn(bufnr, changes, tree, lang)
 
         local root_node = tree:root()
         local query = queries.get_query(lang, "parens")
+        local levels = require("rainbow.levels")[lang]
         if query ~= nil then
             for _, node, _ in query:iter_captures(root_node, bufnr, change[1], change[3] + 1) do
                 -- set colour for this nesting level
                 if not node:has_error() then
-                    local color_no_ = color_no(node, #colors)
+                    local color_no_ = color_no(node, #colors, levels)
                     local startRow, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
                     vim.highlight.range(bufnr, nsid, ("rainbowcol" .. color_no_), {
                         startRow,
