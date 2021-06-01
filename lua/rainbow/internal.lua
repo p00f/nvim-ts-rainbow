@@ -3,7 +3,7 @@ local nvim_query = require("vim.treesitter.query")
 local parsers = require("nvim-treesitter.parsers")
 local configs = require("nvim-treesitter.configs")
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
-local extended_languages = { "latex", "lua" }
+local extended_languages = { "latex" }
 
 -- Try to set colors from config
 local function set_colors(conf, name)
