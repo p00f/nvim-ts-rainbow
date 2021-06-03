@@ -11,6 +11,7 @@ return {
         meta_arguments = true,
         parameters = true,
         parenthesized_expression = true,
+        struct_expression = true,
         tuple_pattern = true,
         tuple_struct_pattern = true,
         type_arguments = true,
