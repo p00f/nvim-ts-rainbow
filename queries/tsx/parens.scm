@@ -1,1 +1,1 @@
-; inherits: square,round,curly
+; inherits: typescript,jsx

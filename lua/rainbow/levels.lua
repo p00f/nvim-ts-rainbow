@@ -59,4 +59,23 @@ return {
         var_definition = true,
         when_statement = true,
     },
+    jsx = {
+        jsx_element = true,
+        jsx_closing_element = true,
+        jsx_expression = true,
+    },
+    typescript = {
+        object_type = true,
+        type_parameters = true,
+    },
+    ecma = {
+        class_body = true,
+        statement_block = true,
+        parenthesized_expression = true,
+        formal_parameters = true,
+        new_expression = true,
+        call_expression = true,
+        object = true,
+        array = true,
+    },
 }
