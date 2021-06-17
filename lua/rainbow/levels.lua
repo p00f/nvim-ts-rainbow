@@ -7,6 +7,7 @@ return {
         declaration_list = true,
         field_declaration_list = true,
         index_expression = true,
+        macro_invocation = true,
         macro_definition = true,
         match_block = true,
         meta_arguments = true,
@@ -22,10 +23,18 @@ return {
         unit_type = true,
         use_list = true,
     },
-    query = {
-        grouping = true,
-        list = true,
-        named_node = true,
+    query = {grouping = true, list = true, named_node = true},
+    c = {
+        array_declarator = true,
+        call_expression = true,
+        for_statement = true,
+        function_definition = true,
+        enumerator_list = true,
+        field_declaration_list = true,
+        initializer_list = true,
+        parameter_list = true,
+        parenthesized_expression = true,
+        subscript_expression = true,
     },
     cpp = {
         array_declarator = true,
@@ -59,15 +68,7 @@ return {
         var_definition = true,
         when_statement = true,
     },
-    jsx = {
-        jsx_element = true,
-        jsx_closing_element = true,
-        jsx_expression = true,
-    },
-    typescript = {
-        object_type = true,
-        type_parameters = true,
-    },
+    jsx = {jsx_element = true, jsx_closing_element = true, jsx_expression = true},
     ecma = {
         class_body = true,
         statement_block = true,
