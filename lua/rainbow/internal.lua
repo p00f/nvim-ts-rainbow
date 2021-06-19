@@ -21,8 +21,12 @@ local termcolors = set_colors(configs, "termcolors")
 
 -- define highlight groups
 for i = 1, #colors do
-    local s = "highlight default rainbowcol" .. i .. " guifg=" .. colors[i] .. " ctermfg=" ..
-                  termcolors[i]
+    local s = "highlight default rainbowcol"
+        .. i
+        .. " guifg="
+        .. colors[i]
+        .. " ctermfg="
+        .. termcolors[i]
     vim.cmd(s)
 end
 
@@ -32,7 +36,9 @@ local function color_no(mynode, len, levels)
     local current = mynode
     while current:parent() ~= nil do
         if levels then
-            if levels[current:type()] then counter = counter + 1 end
+            if levels[current:type()] then
+                counter = counter + 1
+            end
         else
             counter = counter + 1
         end
@@ -46,7 +52,9 @@ local function color_no(mynode, len, levels)
 end
 
 local function callbackfn(bufnr, changes, tree, lang)
-    if vim.fn.pumvisible() == 1 or not lang then return end
+    if vim.fn.pumvisible() == 1 or not lang then
+        return
+    end
 
     for _, change in ipairs(changes) do
         ----clear highlights or code commented out later has highlights too
@@ -61,9 +69,15 @@ local function callbackfn(bufnr, changes, tree, lang)
                 if not node:has_error() then
                     local color_no_ = color_no(node, #colors, levels)
                     local startRow, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
-                    vim.highlight.range(bufnr, nsid, ("rainbowcol" .. color_no_),
-                                        { startRow, startCol }, { endRow, endCol - 1 }, "blockwise",
-                                        true)
+                    vim.highlight.range(
+                        bufnr,
+                        nsid,
+                        ("rainbowcol" .. color_no_),
+                        { startRow, startCol },
+                        { endRow, endCol - 1 },
+                        "blockwise",
+                        true
+                    )
                 end
             end
         end
@@ -85,8 +99,9 @@ local function register_predicates(config)
         else
             enable_extended_mode = config.extended_mode
         end
-        nvim_query.add_predicate(lang .. "-extended-rainbow-mode?",
-                                 function() return enable_extended_mode end, true)
+        nvim_query.add_predicate(lang .. "-extended-rainbow-mode?", function()
+            return enable_extended_mode
+        end, true)
     end
 end
 
