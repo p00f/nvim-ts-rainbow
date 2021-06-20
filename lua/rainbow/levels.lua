@@ -79,4 +79,11 @@ return {
         object = true,
         array = true,
     },
+    elixir = {
+        arguments = true,
+        tuple = true,
+        list = true,
+        binary = true,
+        block = true,
+    }
 }
