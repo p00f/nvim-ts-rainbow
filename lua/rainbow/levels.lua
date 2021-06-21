@@ -83,8 +83,11 @@ return {
         arguments = true,
         binary = true,
         block = true,
+        interpolation = true,
         list = true,
         map = true,
+        sigil = true,
+        struct = true,
         tuple = true,
     }
 }
