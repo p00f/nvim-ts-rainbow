@@ -81,9 +81,10 @@ return {
     },
     elixir = {
         arguments = true,
-        tuple = true,
-        list = true,
         binary = true,
         block = true,
+        list = true,
+        map = true,
+        tuple = true,
     }
 }

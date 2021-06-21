@@ -2,3 +2,6 @@
 (binary
   "<<" @left
   ">>" @right)
+(map
+  "%{" @left
+  "}" @right)
