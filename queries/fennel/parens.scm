@@ -1,2 +1,1 @@
-["{" "[" "("] @left
-["}" "]" ")"] @right
+; inherits: square,round,curly

@@ -1,3 +1,2 @@
-(_
-  "[" @left
-  "]" @right)
+"[" @left
+"]" @right

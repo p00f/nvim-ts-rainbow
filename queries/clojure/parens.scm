@@ -1,1 +1,1 @@
-; inherits: fennel
+; inherits: square,round,curly
