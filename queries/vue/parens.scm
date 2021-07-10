@@ -1,0 +1,4 @@
+; inherits: angle
+
+"</" @left
+"/>" @right
