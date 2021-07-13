@@ -1,4 +1,1 @@
-; inherits: angle
 
-"</" @left
-"/>" @right
