@@ -5,8 +5,8 @@ local configs = require("nvim-treesitter.configs")
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 local extended_languages = { "latex", "html" }
 
--- Try to set colors from config
-local function set_colors(conf, name)
+-- Try to get colors from config
+local function get_colors(conf, name)
     local config = conf.get_module("rainbow")
 
     if config[name] ~= nil and type(config[name]) == "table" then
@@ -16,19 +16,8 @@ local function set_colors(conf, name)
     end
 end
 
-local colors = set_colors(configs, "colors")
-local termcolors = set_colors(configs, "termcolors")
-
--- define highlight groups
-for i = 1, #colors do
-    local s = "highlight default rainbowcol"
-        .. i
-        .. " guifg="
-        .. colors[i]
-        .. " ctermfg="
-        .. termcolors[i]
-    vim.cmd(s)
-end
+local colors = get_colors(configs, "colors")
+local termcolors = get_colors(configs, "termcolors")
 
 -- finds the nesting level of given node
 local function color_no(mynode, len, levels)
@@ -108,6 +97,21 @@ end
 local state_table = {}
 
 local M = {}
+
+function M.defhl()
+    -- define highlight groups
+    for i = 1, #colors do
+        local s = "highlight default rainbowcol"
+            .. i
+            .. " guifg="
+            .. colors[i]
+            .. " ctermfg="
+            .. termcolors[i]
+        vim.cmd(s)
+    end
+end
+
+M.defhl()
 
 function M.attach(bufnr, lang)
     local parser = parsers.get_parser(bufnr, lang)
