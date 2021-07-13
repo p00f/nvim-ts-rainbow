@@ -4,13 +4,16 @@ Rainbow parentheses for neovim using tree-sitter. Needs [nvim-treesitter](https:
 Tested languages - lua, java, clojure, fennel, python, css, rust, cpp. Should work with any language supported by nvim-treesitter. If any language is missing, please open an issue/PR.
 
 
-## Setup
+## Installation and setup
+Install this plugin, then
 ```lua
 require'nvim-treesitter.configs'.setup {
   rainbow = {
     enable = true,
     extended_mode = true, -- Highlight also non-parentheses delimiters, boolean or table: lang -> boolean
     max_file_lines = 1000, -- Do not enable for files with more than 1000 lines, int
+    colors = {} -- table of hex strings
+    termcolors = {} -- table of colour name strings
   }
 }
 ```
@@ -36,7 +39,7 @@ require'nvim-treesitter.configs'.setup{
 }
 ```
 
-If you want to override only a *few* colours (you can only change colours 1 through 7 this way), you can do it in your init.vim: (thanks @delphinus !)
+If you want to override some colours (you can only change colours 1 through 7 this way), you can do it in your init.vim: (thanks @delphinus !). You can also use this while writing a colorscheme
 ```vim
 hi rainbowcol1 guifg=#123456
 ```
