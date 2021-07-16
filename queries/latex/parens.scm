@@ -3,7 +3,6 @@
 (_ "\\[" @left "\\]" @right)
 (_ "\\(" @left "\\)" @right)
 
-; TODO: broken
 [
  "\\begin"
  (#latex-extended-rainbow-mode?)] @left
