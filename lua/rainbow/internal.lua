@@ -81,12 +81,25 @@ local function full_update(bufnr)
 end
 
 local function register_predicates(config)
+    local extended_mode
+
+    if type(config.extended_mode) == "table" then
+        extended_mode = {}
+        for _, lang in pairs(config.extended_mode) do
+            extended_mode[lang] = true
+        end
+    elseif type(config.extended_mode) == "boolean" then
+        extended_mode = config.extended_mode
+    else
+        vim.api.nvim_err_writeln("nvim-ts-rainbow: `extended_mode` can be a boolean or a table")
+    end
+
     for _, lang in ipairs(extended_languages) do
         local enable_extended_mode
-        if type(config.extended_mode) == "table" then
-            enable_extended_mode = config.extended_mode[lang]
+        if type(extended_mode) == "table" then
+            enable_extended_mode = extended_mode[lang]
         else
-            enable_extended_mode = config.extended_mode
+            enable_extended_mode = extended_mode
         end
         nvim_query.add_predicate(lang .. "-extended-rainbow-mode?", function()
             return enable_extended_mode
