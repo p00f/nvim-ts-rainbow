@@ -100,4 +100,9 @@ return {
         struct = true,
         tuple = true,
     },
+    html = {
+        element = true,
+        style_element = true,
+        script_element = true,
+    },
 }
