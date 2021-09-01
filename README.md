@@ -5,21 +5,19 @@ Tested languages - lua, java, clojure, fennel, python, css, rust, cpp. Should wo
 
 
 ## Installation and setup
-Install this plugin, then
+Install this plugin, then to run with default colors, use:
 ```lua
 require'nvim-treesitter.configs'.setup {
   rainbow = {
     enable = true,
     extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
     max_file_lines = nil, -- Do not enable for files with more than n lines, int
-    colors = {}, -- table of hex strings
-    termcolors = {} -- table of colour name strings
   }
 }
 ```
 
 ### Colours
-I've used the gruvbox palette because it is nice and subtle. I wanted to use VIBGYOR for an actual rainbow, but
+I've used the gruvbox palette for default colors because it is nice and subtle. I wanted to use VIBGYOR for an actual rainbow, but
  - indigo and blue look the same.
  - the colours were too bright and distracting.
 
