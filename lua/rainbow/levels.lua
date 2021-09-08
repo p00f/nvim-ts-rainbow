@@ -71,6 +71,7 @@ return {
         sequential_table = true,
         set = true,
         table = true,
+        tset = true,
         var_definition = true,
         when_statement = true,
     },
