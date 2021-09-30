@@ -58,9 +58,13 @@ return {
         template_type = true,
     },
     fennel = {
+        ["for"] = true,
         ["local"] = true,
         each = true,
         fn = true,
+        global = true,
+        hashfn = true,
+        lambda = true,
         let = true,
         list = true,
         match = true,
