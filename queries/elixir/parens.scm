@@ -1,11 +1,8 @@
 ; inherits: square,round,curly
-(binary
+(bitstring
   "<<" @left
   ">>" @right)
 (map
-  "%{" @left
-  "}" @right)
-(struct
   "%" @left
   "{" @left
   "}" @right)
@@ -13,5 +10,5 @@
   "#{" @left
   "}" @right)
 (sigil
-  (sigil_start) @left
-  (sigil_end) @right)
+  (sigil_name) @left
+  (sigil_modifiers) @right)
