@@ -1,7 +1,9 @@
 ; inherits: square,round,curly
 "$" @left
-(_ "\\[" @left "\\]" @right)
-(_ "\\(" @left "\\)" @right)
+"\\[" @left
+"\\]" @right
+"\\(" @left
+"\\)" @right
 
 [
  "\\begin"
