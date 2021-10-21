@@ -5,9 +5,13 @@ Tested languages - lua, java, clojure, fennel, python, css, rust, cpp. Should wo
 
 
 ## Installation and setup
-Install this plugin, then
+Install this plugin, then add a `rainbow` section in the [call to `require("nvim-treesitter.configs").setup()`](https://github.com/nvim-treesitter/nvim-treesitter#modules):
 ```lua
-require'nvim-treesitter.configs'.setup {
+require("nvim-treesitter.configs").setup {
+  highlight = {
+      -- ...
+  },
+  ...
   rainbow = {
     enable = true,
     extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
