@@ -1,7 +1,6 @@
 # 🌈 nvim-ts-rainbow 🌈
 Rainbow parentheses for neovim using tree-sitter. Needs [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter).
-
-Tested languages - lua, java, clojure, fennel, python, css, rust, cpp. Should work with any language supported by nvim-treesitter. If any language is missing, please open an issue/PR.
+Should work with any language supported by nvim-treesitter. If any language is missing, please open an issue/PR.
 
 
 ## Installation and setup
