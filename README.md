@@ -1,5 +1,7 @@
 # 🌈 nvim-ts-rainbow 🌈
-Rainbow parentheses for neovim using tree-sitter. Needs [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter).
+Rainbow parentheses for neovim using tree-sitter.
+This is a module for [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter), not a standalone plugin. It requires and is configured via nvim-treesitter
+
 Should work with any language supported by nvim-treesitter. If any language is missing, please open an issue/PR.
 
 
