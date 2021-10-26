@@ -66,6 +66,7 @@ return {
         hashfn = true,
         lambda = true,
         let = true,
+        let_clause = true,
         list = true,
         match = true,
         parameters = true,
