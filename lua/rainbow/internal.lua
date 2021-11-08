@@ -23,17 +23,22 @@ local termcolors = get_colors(configs, "termcolors")
 local function color_no(mynode, len, levels)
     local counter = 0
     local current = mynode
+    local found = false
     while current:parent() ~= nil do
         if levels then
             if levels[current:type()] then
                 counter = counter + 1
+                found = true
             end
         else
             counter = counter + 1
+            found = true
         end
         current = current:parent()
     end
-    if counter % len == 0 then
+    if not found then
+        return 1
+    elseif counter % len == 0 then
         return len
     else
         return (counter % len)
