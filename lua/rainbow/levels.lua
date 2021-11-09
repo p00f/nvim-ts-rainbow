@@ -1,4 +1,18 @@
 return {
+    python = {
+        tuple = true,
+        list = true,
+        dictionary = true,
+        set = true,
+        subscript = true,
+        argument_list = true,
+        parameters = true,
+        parenthesized_expression = true,
+        generator_expression = true,
+        list_comprehension = true,
+        dictionary_comprehension = true,
+        set_comprehension = true,
+    },
     rust = {
         arguments = true,
         array_expression = true,
