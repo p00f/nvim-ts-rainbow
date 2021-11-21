@@ -6,7 +6,7 @@ Should work with any language supported by nvim-treesitter. If any language is m
 
 
 ## Installation and setup
-Install this plugin, then add a `rainbow` section in the [call to `require("nvim-treesitter.configs").setup()`](https://github.com/nvim-treesitter/nvim-treesitter#modules):
+Install and set up nvim-treesitter according to their documentation. Install this plugin, then add a `rainbow` section in the [call to `require("nvim-treesitter.configs").setup()`](https://github.com/nvim-treesitter/nvim-treesitter#modules):
 ```lua
 require("nvim-treesitter.configs").setup {
   highlight = {
