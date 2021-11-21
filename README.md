@@ -24,6 +24,8 @@ require("nvim-treesitter.configs").setup {
 }
 ```
 
+If you want to enable it only for some filetypes and disable it for everything else, see https://github.com/p00f/nvim-ts-rainbow/issues/30#issuecomment-850991264
+
 ### Colours
 I've used the gruvbox palette because it is nice and subtle. I wanted to use VIBGYOR for an actual rainbow, but
  - indigo and blue look the same.
