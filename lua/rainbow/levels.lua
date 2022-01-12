@@ -47,6 +47,7 @@ return {
     c = {
         array_declarator = true,
         call_expression = true,
+        compound_statement = true,
         enumerator_list = true,
         field_declaration_list = true,
         for_statement = true,
