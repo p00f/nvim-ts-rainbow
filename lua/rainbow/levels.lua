@@ -1,6 +1,7 @@
 return {
     python = {
         tuple = true,
+        interpolation = true,
         list = true,
         dictionary = true,
         set = true,
