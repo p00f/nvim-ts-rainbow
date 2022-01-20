@@ -71,7 +71,7 @@ local function callbackfn(bufnr, changes, tree, lang)
                         { endRow, endCol - 1 },
                         "blockwise",
                         true,
-                        100
+                        120
                     )
                 end
             end
