@@ -124,4 +124,11 @@ return {
         style_element = true,
         script_element = true,
     },
+    lua = {
+        table_constructor = true,
+        arguments = true,
+        parameters = true,
+        bracket_index_expression = true,
+        parenthesized_expression = true,
+    },
 }
