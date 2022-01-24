@@ -4,20 +4,8 @@ local parsers = require("nvim-treesitter.parsers")
 local configs = require("nvim-treesitter.configs")
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 local extended_languages = { "latex", "html" }
-
--- Try to get colors from config
-local function get_colors(conf, name)
-    local config = conf.get_module("rainbow")
-
-    if config[name] ~= nil and type(config[name]) == "table" then
-        return config[name]
-    else
-        return require("rainbow." .. name)
-    end
-end
-
-local colors = get_colors(configs, "colors")
-local termcolors = get_colors(configs, "termcolors")
+local colors = configs.get_module("rainbow").colors
+local termcolors = configs.get_module("rainbow").termcolors
 
 -- finds the nesting level of given node
 local function color_no(mynode, len, levels)
