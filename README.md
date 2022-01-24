@@ -31,7 +31,7 @@ I've used the gruvbox palette because it is nice and subtle. I wanted to use VIB
  - indigo and blue look the same.
  - the colours were too bright and distracting.
 
-To change the colors you can edit `lua/rainbow/colors.lua` or add following code to setup
+To change the colours you can set them in the setup:
 ```lua
 require'nvim-treesitter.configs'.setup{
   rainbow = {
