@@ -8,9 +8,9 @@ local colors = configs.get_module("rainbow").colors
 local termcolors = configs.get_module("rainbow").termcolors
 
 --- Find the nesting level of a node.
---- @param node table Node to find the level of
---- @param len number Number of colours
---- @param levels table Levels for the language
+--- @param node table # Node to find the level of
+--- @param len number # Number of colours
+--- @param levels table # Levels for the language
 local function color_no(node, len, levels)
     local counter = 0
     local current = node
@@ -37,10 +37,10 @@ local function color_no(node, len, levels)
 end
 
 --- Update highlights for a range. Called every time text is changed.
---- @param bufnr number Buffer number
---- @param changes table Range of text changes
---- @param tree table Syntax tree
---- @param lang string Language
+--- @param bufnr number # Buffer number
+--- @param changes table # Range of text changes
+--- @param tree table # Syntax tree
+--- @param lang string # Language
 local function update_range(bufnr, changes, tree, lang)
     if vim.fn.pumvisible() == 1 or not lang then
         return
@@ -75,8 +75,8 @@ local function update_range(bufnr, changes, tree, lang)
     end
 end
 
---- Update highlights for every tree in buffer.
---- @param bufnr number Buffer number
+--- Update highlights for every tree in given buffer.
+--- @param bufnr number # Buffer number
 local function full_update(bufnr)
     local parser = parsers.get_parser(bufnr)
     parser:for_each_tree(function(tree, sub_parser)
@@ -85,7 +85,7 @@ local function full_update(bufnr)
 end
 
 --- Regsiter predicates for extended mode.
---- @param config table Configuration for the `rainbow` module in nvim-treesitter
+--- @param config table # Configuration for the `rainbow` module in nvim-treesitter
 local function register_predicates(config)
     local extended_mode
 
@@ -117,7 +117,7 @@ local state_table = {}
 
 local M = {}
 
---- Define highlight groups. Needs to be a function to allow an autocmd doing this at colorscheme change.
+--- Define highlight groups. This had to be a function to allow an autocmd doing this at colorscheme change.
 function M.defhl()
     for i = 1, #colors do
         local s = "highlight default rainbowcol"
@@ -133,8 +133,8 @@ end
 M.defhl()
 
 --- Attach module to buffer. Called when new buffer is opened or `:TSBufEnable rainbow`.
---- @param bufnr number Buffer number
---- @param lang string Buffer language
+--- @param bufnr number # Buffer number
+--- @param lang string # Buffer language
 function M.attach(bufnr, lang)
     local config = configs.get_module("rainbow")
     local max_file_lines = config.max_file_lines
@@ -157,7 +157,7 @@ function M.attach(bufnr, lang)
 end
 
 --- Detach module from buffer. Called when `:TSBufDisable rainbow`.
---- @param bufnr number Buffer number
+--- @param bufnr number # Buffer number
 function M.detach(bufnr)
     state_table[bufnr] = false
     local hlmap = vim.treesitter.highlighter.hl_map
