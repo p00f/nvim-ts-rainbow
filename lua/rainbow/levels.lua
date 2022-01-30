@@ -77,6 +77,7 @@ return {
         ["for"] = true,
         ["local"] = true,
         each = true,
+        each_clause = true,
         fn = true,
         global = true,
         hashfn = true,
