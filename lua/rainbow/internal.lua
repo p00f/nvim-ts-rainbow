@@ -3,7 +3,7 @@ local nvim_query = require("vim.treesitter.query")
 local parsers = require("nvim-treesitter.parsers")
 local configs = require("nvim-treesitter.configs")
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
-local extended_languages = { "latex", "html" }
+local extended_languages = { "latex", "html", "verilog" }
 local colors = configs.get_module("rainbow").colors
 local termcolors = configs.get_module("rainbow").termcolors
 
