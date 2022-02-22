@@ -65,9 +65,11 @@ local function update_range(bufnr, changes, tree, lang)
                         ("rainbowcol" .. color_no_),
                         { startRow, startCol },
                         { endRow, endCol - 1 },
-                        "blockwise",
-                        true,
-                        120
+                        {
+                            regtype = "blockwise",
+                            inclusive = true,
+                            priority = 120,
+                        }
                     )
                 end
             end
