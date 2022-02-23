@@ -4,6 +4,8 @@ This is a module for [nvim-treesitter](https://github.com/nvim-treesitter/nvim-t
 
 Should work with any language supported by nvim-treesitter. If any language is missing, please open an issue/PR.
 
+Only neovim nightly is targeted.
+
 
 ## Installation and setup
 Install and set up nvim-treesitter according to their documentation. Install this plugin, then add a `rainbow` section in the [call to `require("nvim-treesitter.configs").setup()`](https://github.com/nvim-treesitter/nvim-treesitter#modules):
