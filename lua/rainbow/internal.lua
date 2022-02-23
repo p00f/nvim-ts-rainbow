@@ -59,7 +59,8 @@ local function update_range(bufnr, changes, tree, lang)
                 if not node:has_error() then
                     local color_no_ = color_no(node, #colors, levels)
                     local startRow, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
-                    vim.highlight.range(
+                    local success = pcall(
+                        vim.highlight.range,
                         bufnr,
                         nsid,
                         ("rainbowcol" .. color_no_),
@@ -71,6 +72,18 @@ local function update_range(bufnr, changes, tree, lang)
                             priority = 120,
                         }
                     )
+                    if not success then
+                        vim.highlight.range(
+                            bufnr,
+                            nsid,
+                            ("rainbowcol" .. color_no_),
+                            { startRow, startCol },
+                            { endRow, endCol - 1 },
+                            "blockwise",
+                            true,
+                            120
+                        )
+                    end
                 end
             end
         end
