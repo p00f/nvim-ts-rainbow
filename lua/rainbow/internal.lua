@@ -67,7 +67,7 @@ local function update_range(bufnr, changes, tree, lang)
                             { startRow, startCol },
                             { endRow, endCol - 1 },
                             {
-                                regtype = "blockwise",
+                                regtype = "",
                                 inclusive = true,
                                 priority = 120,
                             }
