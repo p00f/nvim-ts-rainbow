@@ -132,4 +132,7 @@ return {
         bracket_index_expression = true,
         parenthesized_expression = true,
     },
+    commonlisp = {
+        list_lit = true,
+    },
 }
