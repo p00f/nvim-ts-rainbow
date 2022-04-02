@@ -61,6 +61,7 @@ return {
     cpp = {
         array_declarator = true,
         call_expression = true,
+        cast_expression = true,
         compound_statement = true,
         condition_clause = true,
         declaration_list = true,
@@ -69,6 +70,8 @@ return {
         initializer_list = true,
         parameter_list = true,
         parenthesized_expression = true,
+        preproc_params = true,
+        lambda_capture_specifier = true,
         subscript_expression = true,
         template_parameter_list = true,
         template_type = true,
@@ -122,15 +125,15 @@ return {
     },
     html = {
         element = true,
-        style_element = true,
         script_element = true,
+        style_element = true,
     },
     lua = {
-        table_constructor = true,
         arguments = true,
-        parameters = true,
         bracket_index_expression = true,
+        parameters = true,
         parenthesized_expression = true,
+        table_constructor = true,
     },
     commonlisp = {
         list_lit = true,
