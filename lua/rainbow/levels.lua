@@ -16,6 +16,7 @@ return {
     },
     rust = {
         arguments = true,
+        token_tree = true,
         array_expression = true,
         attribute_item = true,
         block = true,
@@ -24,7 +25,6 @@ return {
         field_declaration_list = true,
         index_expression = true,
         macro_definition = true,
-        macro_invocation = true,
         macro_rule = true,
         match_block = true,
         meta_arguments = true,
