@@ -1,7 +1,8 @@
 local queries = require("nvim-treesitter.query")
-local nvim_query = require("vim.treesitter.query")
 local parsers = require("nvim-treesitter.parsers")
 local configs = require("nvim-treesitter.configs")
+
+local add_predicate = vim.treesitter.query.add_predicate
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
 local extended_languages = { "latex", "html", "verilog" }
 local colors = configs.get_module("rainbow").colors
@@ -99,7 +100,7 @@ local function full_update(bufnr)
     end)
 end
 
---- Regsiter predicates for extended mode.
+--- Register predicates for extended mode.
 --- @param config table # Configuration for the `rainbow` module in nvim-treesitter
 local function register_predicates(config)
     local extended_mode
@@ -122,7 +123,7 @@ local function register_predicates(config)
         else
             enable_extended_mode = extended_mode
         end
-        nvim_query.add_predicate(lang .. "-extended-rainbow-mode?", function()
+        add_predicate(lang .. "-extended-rainbow-mode?", function()
             return enable_extended_mode
         end, true)
     end
