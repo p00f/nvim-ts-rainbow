@@ -138,7 +138,10 @@ function M.defhl()
     for i = 1, #colors do
         local s = string.format(
             "highlight default rainbowcol%d guifg=%s ctermfg=%s",
-            i, colors[i], termcolors[i])
+            i,
+            colors[i],
+            termcolors[i]
+        )
         vim.cmd(s)
     end
 end
