@@ -43,7 +43,7 @@ end
 --- @param tree table # Syntax tree
 --- @param lang string # Language
 local function update_range(bufnr, changes, tree, lang)
-    if vim.fn.pumvisible() == 1 or not lang then
+    if vim.fn.pumvisible() ~= 0 or not lang then
         return
     end
 
@@ -136,12 +136,9 @@ local M = {}
 --- Define highlight groups. This had to be a function to allow an autocmd doing this at colorscheme change.
 function M.defhl()
     for i = 1, #colors do
-        local s = "highlight default rainbowcol"
-            .. i
-            .. " guifg="
-            .. colors[i]
-            .. " ctermfg="
-            .. termcolors[i]
+        local s = string.format(
+            "highlight default rainbowcol%d guifg=%s ctermfg=%s",
+            i, colors[i], termcolors[i])
         vim.cmd(s)
     end
 end
@@ -163,7 +160,7 @@ function M.attach(bufnr, lang)
     local parser = parsers.get_parser(bufnr, lang)
     parser:register_cbs({
         on_changedtree = function(changes, tree)
-            if state_table[bufnr] == true then
+            if state_table[bufnr] then
                 update_range(bufnr, changes, tree, lang)
             else
                 return
