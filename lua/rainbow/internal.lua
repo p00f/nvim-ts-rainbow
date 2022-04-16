@@ -8,6 +8,10 @@ local extended_languages = { "latex", "html", "verilog" }
 local colors = configs.get_module("rainbow").colors
 local termcolors = configs.get_module("rainbow").termcolors
 
+--- Maps a buffer ID to the buffer's parser; retaining a reference prevents the
+--- parser from getting garbage-collected.
+local buffer_parsers = {}
+
 --- Find the nesting level of a node.
 --- @param node table # Node to find the level of
 --- @param len number # Number of colours
@@ -94,7 +98,7 @@ end
 --- Update highlights for every tree in given buffer.
 --- @param bufnr number # Buffer number
 local function full_update(bufnr)
-    local parser = parsers.get_parser(bufnr)
+    local parser = buffer_parsers[bufnr]
     parser:for_each_tree(function(tree, sub_parser)
         update_range(bufnr, { { tree:root():range() } }, tree, sub_parser:lang())
     end)
@@ -158,8 +162,6 @@ function M.attach(bufnr, lang)
         return
     end
     register_predicates(config)
-    full_update(bufnr)
-    state_table[bufnr] = true
     local parser = parsers.get_parser(bufnr, lang)
     parser:register_cbs({
         on_changedtree = function(changes, tree)
@@ -170,6 +172,9 @@ function M.attach(bufnr, lang)
             end
         end,
     })
+    buffer_parsers[bufnr] = parser
+    state_table[bufnr] = true
+    full_update(bufnr)
 end
 
 --- Detach module from buffer. Called when `:TSBufDisable rainbow`.
@@ -179,6 +184,7 @@ function M.detach(bufnr)
     local hlmap = vim.treesitter.highlighter.hl_map
     hlmap["punctuation.bracket"] = "TSPunctBracket"
     vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1)
+    buffer_parsers[bufnr] = nil
 end
 
 return M
