@@ -12,17 +12,20 @@ local termcolors = configs.get_module("rainbow").termcolors
 --- Maps a buffer ID to the buffer's parser; retaining a reference prevents the
 --- parser from getting garbage-collected.
 local buffer_parsers = {}
-api.nvim_create_augroup("RainbowParser", {})
-api.nvim_create_autocmd("FileType", {
-    group = "RainbowParser",
-    pattern = "*",
-    callback = function()
-        local bufnr = api.nvim_get_current_buf()
-        local lang = parsers.get_buf_lang(bufnr)
-        local parser = parsers.get_parser(bufnr, lang)
-        buffer_parsers[bufnr] = parser
-    end,
-})
+
+if vim.fn.has("nvim-0.7") == 1 then
+    api.nvim_create_augroup("RainbowParser", {})
+    api.nvim_create_autocmd("FileType", {
+        group = "RainbowParser",
+        pattern = "*",
+        callback = function()
+            local bufnr = api.nvim_get_current_buf()
+            local lang = parsers.get_buf_lang(bufnr)
+            local parser = parsers.get_parser(bufnr, lang)
+            buffer_parsers[bufnr] = parser
+        end,
+    })
+end
 
 --- Find the nesting level of a node.
 --- @param node table # Node to find the level of
