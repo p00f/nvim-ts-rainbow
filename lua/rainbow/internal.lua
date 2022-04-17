@@ -13,20 +13,6 @@ local termcolors = configs.get_module("rainbow").termcolors
 --- parser from getting garbage-collected.
 local buffer_parsers = {}
 
-if vim.fn.has("nvim-0.7") == 1 then
-    api.nvim_create_augroup("RainbowParser", {})
-    api.nvim_create_autocmd("FileType", {
-        group = "RainbowParser",
-        pattern = "*",
-        callback = function()
-            local bufnr = api.nvim_get_current_buf()
-            local lang = parsers.get_buf_lang(bufnr)
-            local parser = parsers.get_parser(bufnr, lang)
-            buffer_parsers[bufnr] = parser
-        end,
-    })
-end
-
 --- Find the nesting level of a node.
 --- @param node table # Node to find the level of
 --- @param len number # Number of colours
@@ -200,6 +186,22 @@ function M.detach(bufnr)
     hlmap["punctuation.bracket"] = "TSPunctBracket"
     vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1)
     buffer_parsers[bufnr] = nil
+end
+
+if vim.fn.has("nvim-0.7") == 1 then
+    api.nvim_create_augroup("RainbowParser", {})
+    api.nvim_create_autocmd("FileType", {
+        group = "RainbowParser",
+        pattern = "*",
+        callback = function()
+            local bufnr = api.nvim_get_current_buf()
+            if state_table[bufnr] then
+                local lang = parsers.get_buf_lang(bufnr)
+                local parser = parsers.get_parser(bufnr, lang)
+                buffer_parsers[bufnr] = parser
+            end
+        end,
+    })
 end
 
 return M
