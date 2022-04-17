@@ -1,6 +1,7 @@
 local queries = require("nvim-treesitter.query")
 local parsers = require("nvim-treesitter.parsers")
 local configs = require("nvim-treesitter.configs")
+local api = vim.api
 
 local add_predicate = vim.treesitter.query.add_predicate
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
@@ -11,6 +12,17 @@ local termcolors = configs.get_module("rainbow").termcolors
 --- Maps a buffer ID to the buffer's parser; retaining a reference prevents the
 --- parser from getting garbage-collected.
 local buffer_parsers = {}
+api.nvim_create_augroup("RainbowParser", {})
+api.nvim_create_autocmd("FileType", {
+    group = "RainbowParser",
+    pattern = "*",
+    callback = function()
+        local bufnr = api.nvim_get_current_buf()
+        local lang = parsers.get_buf_lang(bufnr)
+        local parser = parsers.get_parser(bufnr, lang)
+        buffer_parsers[bufnr] = parser
+    end,
+})
 
 --- Find the nesting level of a node.
 --- @param node table # Node to find the level of
