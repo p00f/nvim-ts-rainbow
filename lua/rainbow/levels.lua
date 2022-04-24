@@ -112,6 +112,18 @@ return {
         parenthesized_expression = true,
         statement_block = true,
     },
+    javascript = {
+        array = true,
+        call_expression = true,
+        class_body = true,
+        formal_parameters = true,
+        new_expression = true,
+        object = true,
+        parenthesized_expression = true,
+        statement_block = true,
+        template_substitution = true,
+        subscript_expression = true,
+    },
     elixir = {
         arguments = true,
         binary = true,
