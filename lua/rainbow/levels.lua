@@ -114,10 +114,16 @@ return {
         var = true,
     },
     jsx = {
+        formal_parameters = true,
+        statement_block = true,
+        parenthesized_expression = true,
         jsx_element = true,
         jsx_expression = true,
     },
     tsx = {
+        formal_parameters = true,
+        statement_block = true,
+        parenthesized_expression = true,
         jsx_element = true,
         jsx_expression = true,
     },
