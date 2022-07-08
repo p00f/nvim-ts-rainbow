@@ -114,7 +114,10 @@ return {
         var = true,
     },
     jsx = {
-        jsx_closing_element = true,
+        jsx_element = true,
+        jsx_expression = true,
+    },
+    tsx = {
         jsx_element = true,
         jsx_expression = true,
     },
