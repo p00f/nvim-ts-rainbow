@@ -21,7 +21,7 @@ local api = vim.api
 
 local add_predicate = vim.treesitter.query.add_predicate
 local nsid = vim.api.nvim_create_namespace("rainbow_ns")
-local extended_languages = { "latex", "html", "verilog" }
+local extended_languages = { "latex", "html", "verilog", "jsx" }
 local colors = configs.get_module("rainbow").colors
 local termcolors = configs.get_module("rainbow").termcolors
 
