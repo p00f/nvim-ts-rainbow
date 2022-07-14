@@ -119,6 +119,7 @@ return {
         parenthesized_expression = true,
         jsx_element = true,
         jsx_expression = true,
+        array = true,
     },
     tsx = {
         formal_parameters = true,
@@ -126,6 +127,7 @@ return {
         parenthesized_expression = true,
         jsx_element = true,
         jsx_expression = true,
+        array = true,
     },
     ecma = {
         array = true,
