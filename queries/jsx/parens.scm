@@ -4,6 +4,10 @@
    name: _ @left
  ) (#jsx-extended-rainbow-mode?))
 
+((jsx_self_closing_element
+   name: _ @self-closing
+ ) (#jsx-extended-rainbow-mode?))
+
 ((jsx_closing_element
    name: _ @right
  ) (#jsx-extended-rainbow-mode?))
