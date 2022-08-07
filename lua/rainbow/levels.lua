@@ -113,15 +113,6 @@ return {
         table = true,
         var = true,
     },
-    jsx = {
-        array = true,
-        formal_parameters = true,
-        jsx_element = true,
-        jsx_expression = true,
-        jsx_self_closing_element = true,
-        parenthesized_expression = true,
-        statement_block = true,
-    },
     tsx = {
         arguments = true,
         array = true,
@@ -137,16 +128,6 @@ return {
         parenthesized_expression = true,
         statement_block = true,
         type_arguments = true,
-    },
-    ecma = {
-        array = true,
-        call_expression = true,
-        class_body = true,
-        formal_parameters = true,
-        new_expression = true,
-        object = true,
-        parenthesized_expression = true,
-        statement_block = true,
     },
     javascript = {
         array = true,
