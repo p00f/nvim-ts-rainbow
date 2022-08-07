@@ -1,5 +1,3 @@
-; inherits: square,round,curly
-
 ((jsx_opening_element
    "<" @left-tag-start
    name: _ @left
@@ -19,8 +17,3 @@
    name: _ @right
    ">" @right-tag-end
  ) (#jsx-extended-rainbow-mode? @right-tag-start @right-tag-end @right))
-
-; [(jsx_element
-;    open_tag: (jsx_opening_element) @left
-;    close_tag: (jsx_closing_element) @right)
-;  (#jsx-extended-rainbow-mode?)]
