@@ -166,6 +166,7 @@ return {
     lua = {
         arguments = true,
         bracket_index_expression = true,
+        if_statement = true,
         parameters = true,
         parenthesized_expression = true,
         table_constructor = true,
