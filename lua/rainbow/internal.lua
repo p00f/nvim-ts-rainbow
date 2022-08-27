@@ -17,6 +17,7 @@
 local queries = require("nvim-treesitter.query")
 local parsers = require("nvim-treesitter.parsers")
 local configs = require("nvim-treesitter.configs")
+local util = require("rainbow.util")
 local api = vim.api
 
 local add_predicate = vim.treesitter.query.add_predicate
@@ -68,6 +69,9 @@ local function update_range(bufnr, changes, tree, lang)
         return
     end
 
+    local curpos = vim.fn.getpos('.')
+    local r, c = curpos[2] - 1, curpos[3] - 1
+
     for _, change in ipairs(changes) do
         --- clear highlights or code commented out later has highlights too
         vim.api.nvim_buf_clear_namespace(bufnr, nsid, change[1], change[3] + 1)
@@ -81,30 +85,71 @@ local function update_range(bufnr, changes, tree, lang)
                 if not node:has_error() then
                     local color_no_ = color_no(node, #colors, levels)
                     local startRow, startCol, endRow, endCol = node:range() -- range of the capture, zero-indexed
-                    if vim.fn.has("nvim-0.7") == 1 then
-                        vim.highlight.range(
-                            bufnr,
-                            nsid,
-                            ("rainbowcol" .. color_no_),
-                            { startRow, startCol },
-                            { endRow, endCol - 1 },
-                            {
-                                regtype = "b",
-                                inclusive = true,
-                                priority = 120,
-                            }
-                        )
+                    -- Node containing the current delimiter
+                    local ancestor = node:parent()
+
+                    -- Whether to proceed with the highlighting
+                    local proceed = false
+
+                    if util.contains_point(ancestor, r, c) then
+                    	-- We always highlight the subtree containing the
+                    	-- cursor
+                    	proceed = true
                     else
-                        vim.highlight.range(
-                            bufnr,
-                            nsid,
-                            ("rainbowcol" .. color_no_),
-                            { startRow, startCol },
-                            { endRow, endCol - 1 },
-                            "blockwise",
-                            true,
-                            120
-                        )
+                    	-- The cursor might be in one of the ancestors of the
+                    	-- delimiter; search up until we reach the root
+                    	while ancestor ~= root_node do
+                    		-- We found a parent containing the cursor, now we need
+                    		-- to iterate over the children of that node. Find the
+                    		-- child containing the cursor
+                    		if util.contains_point(ancestor, r, c) then
+                    			local a_child_contains_cursor = false
+                    			for child in ancestor:iter_children() do
+                    				if util.contains_point(child, r, c) then
+                    					-- The child must also contain the current node
+                    					if util.contains_node(child, node) or child:child_count() == 0 then
+											proceed = true
+                    					end
+										a_child_contains_cursor = true
+                    					break
+                    				end
+                    			end
+                    			-- If none of the children contain the cursor it means
+                    			-- the current ancestor must contain the cursor
+                    			if not a_child_contains_cursor then
+									proceed = true
+                    			end
+                    			break
+                    		end
+                    		ancestor = ancestor:parent()
+                    	end
+                    end
+                    if proceed then
+                    	if vim.fn.has("nvim-0.7") == 1 then
+                        	vim.highlight.range(
+                            	bufnr,
+                            	nsid,
+                            	("rainbowcol" .. color_no_),
+                            	{ startRow, startCol },
+                            	{ endRow, endCol - 1 },
+                            	{
+                                	regtype = "b",
+                                	inclusive = true,
+                                	priority = 120,
+                            	}
+                        	)
+                    	else
+                        	vim.highlight.range(
+                            	bufnr,
+                            	nsid,
+                            	("rainbowcol" .. color_no_),
+                            	{ startRow, startCol },
+                            	{ endRow, endCol - 1 },
+                            	"blockwise",
+                            	true,
+                            	120
+                        	)
+                    	end
                     end
                 end
             end
@@ -115,7 +160,9 @@ end
 --- Update highlights for every tree in given buffer.
 --- @param bufnr number # Buffer number
 local function full_update(bufnr)
+	if bufnr == 0 then bufnr = vim.fn.bufnr() end
     local parser = buffer_parsers[bufnr]
+    if not parser then return end
     parser:for_each_tree(function(tree, sub_parser)
         update_range(bufnr, { { tree:root():range() } }, tree, sub_parser:lang())
     end)
@@ -223,4 +270,5 @@ if vim.fn.has("nvim-0.7") == 1 then
     })
 end
 
+M.full_update = full_update
 return M
