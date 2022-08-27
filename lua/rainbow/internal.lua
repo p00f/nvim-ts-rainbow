@@ -198,8 +198,11 @@ end
 --- @param bufnr number # Buffer number
 function M.detach(bufnr)
     state_table[bufnr] = false
-    local hlmap = vim.treesitter.highlighter.hl_map
-    hlmap["punctuation.bracket"] = "TSPunctBracket"
+    if vim.treesitter.highlighter.hl_map then
+        vim.treesitter.highlighter.hl_map["punctuation.bracket"] = "TSPunctBracket"
+    else
+        vim.api.nvim_set_hl(0, "@punctuation.bracket", { link = "TSPunctBracket" })
+    end
     vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1)
     buffer_parsers[bufnr] = nil
 end
