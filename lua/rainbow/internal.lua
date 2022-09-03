@@ -91,7 +91,7 @@ local function update_range(bufnr, changes, tree, lang)
                             {
                                 regtype = "b",
                                 inclusive = true,
-                                priority = 120,
+                                priority = 210,
                             }
                         )
                     else
@@ -103,7 +103,7 @@ local function update_range(bufnr, changes, tree, lang)
                             { endRow, endCol - 1 },
                             "blockwise",
                             true,
-                            120
+                            210
                         )
                     end
                 end

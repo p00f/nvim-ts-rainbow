@@ -172,4 +172,10 @@ return {
     commonlisp = {
         list_lit = true,
     },
+    make = {
+        command_substitution = true,
+        function_call = true,
+        substitution_reference = true,
+        variable_reference = true,
+    }
 }
