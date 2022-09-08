@@ -156,14 +156,9 @@ local M = {}
 
 --- Define highlight groups. This had to be a function to allow an autocmd doing this at colorscheme change.
 function M.defhl()
+    local set_hl = vim.api.nvim_set_hl
     for i = 1, #colors do
-        local s = string.format(
-            "highlight default rainbowcol%d guifg=%s ctermfg=%s",
-            i,
-            colors[i],
-            termcolors[i]
-        )
-        vim.cmd(s)
+        set_hl(0, 'rainbowcol' .. i, { fg = colors[i], ctermfg = termcolors[i] })
     end
 end
 
