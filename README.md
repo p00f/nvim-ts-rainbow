@@ -6,6 +6,9 @@ Should work with any language supported by nvim-treesitter. If any language is m
 
 Only neovim nightly is targeted.
 
+## Warning/notice/whatever
+
+The queries might be out of date at any time, keeping up with them for languages I don't use is not feasible. If you get errors like `invalid node at position xxx`, try removing this plugin. If it fixes the problem, open an issue/PR
 
 ## Installation and setup
 Install and set up nvim-treesitter according to their documentation. Install this plugin, then add a `rainbow` section in the [call to `require("nvim-treesitter.configs").setup()`](https://github.com/nvim-treesitter/nvim-treesitter#modules):
