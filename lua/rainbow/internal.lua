@@ -161,7 +161,7 @@ function M.defhl()
             "highlight default rainbowcol%d guifg=%s ctermfg=%s",
             i,
             colors[i],
-            termcolors[i]
+            termcolors[(i % #termcolors == 0) and #termcolors or (i % #termcolors)]
         )
         vim.cmd(s)
     end
