@@ -156,13 +156,16 @@ local M = {}
 
 --- Define highlight groups. This had to be a function to allow an autocmd doing this at colorscheme change.
 function M.defhl()
-    for i = 1, #colors do
-        local s = string.format(
-            "highlight default rainbowcol%d guifg=%s ctermfg=%s",
-            i,
-            colors[i],
-            termcolors[(i % #termcolors == 0) and #termcolors or (i % #termcolors)]
-        )
+    for i = 1, math.max(#colors, #termcolors) do
+        local s = string.format("highlight default rainbowcol%d", i)
+        if #colors > 0 then
+            s = s .. " guifg=" .. colors[(i % #colors == 0) and #colors or (i % #colors)]
+        end
+        if #termcolors > 0 then
+            s = s
+                .. " ctermfg="
+                .. termcolors[(i % #termcolors == 0) and #termcolors or (i % #termcolors)]
+        end
         vim.cmd(s)
     end
 end
