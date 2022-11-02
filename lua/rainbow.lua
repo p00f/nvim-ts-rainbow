@@ -14,12 +14,17 @@
    limitations under the License.
 --]]
 
+local status_ok, nvim_ts = pcall(require, 'nvim-treesitter')
+if not status_ok then
+  return "nvim-treesitter is not installed"
+end
+
 local queries = require("nvim-treesitter.query")
 
 local M = {}
 
 function M.init()
-    require("nvim-treesitter").define_modules({
+    nvim_ts.define_modules({
         rainbow = {
             module_path = "rainbow.internal",
             is_supported = function(lang)
