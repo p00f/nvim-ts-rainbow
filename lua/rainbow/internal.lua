@@ -69,9 +69,6 @@ local function update_range(bufnr, changes, tree, lang)
     end
 
     for _, change in ipairs(changes) do
-        --- clear highlights or code commented out later has highlights too
-        vim.api.nvim_buf_clear_namespace(bufnr, nsid, change[1], change[3] + 1)
-
         local root_node = tree:root()
         local query = queries.get_query(lang, "parens")
         local levels = require("rainbow.levels")[lang]
