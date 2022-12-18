@@ -183,7 +183,14 @@ function M.attach(bufnr, lang)
     parser:register_cbs({
         on_changedtree = function(changes, tree)
             if state_table[bufnr] then
-                update_range(bufnr, changes, tree, lang)
+                if #changes == 0 then
+                    -- Changes is empty when the entire buffer is reloaded.
+                    -- Let's clear and update the entire buffer.
+                    vim.api.nvim_buf_clear_namespace(bufnr, nsid, 0, -1);
+                    update_range(bufnr, { { tree:root():range() } }, tree, lang)
+                else
+                    update_range(bufnr, changes, tree, lang)
+                end
             else
                 return
             end
