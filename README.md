@@ -1,3 +1,8 @@
+# NO LONGER MAINTAINED
+This plugin is no longer maintained.
+
+I'm archiving the GitHub repo and closing the sourcehut issue tracker. Feel free to fork
+
 # 🌈 nvim-ts-rainbow 🌈
 Rainbow parentheses for neovim using tree-sitter.
 This is a module for [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter), not a standalone plugin. It requires and is configured via nvim-treesitter
